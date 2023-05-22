@@ -36,7 +36,6 @@ def login():
             account = cursor.fetchone()
 
             if account:
-
                 return {
                     "status": "SUCESS",
                     "message": "LOGIN  SUCESSFULLY",
@@ -171,8 +170,6 @@ def get_company(ids):
     }
 
 
-
-
 @app.route("/add_product", methods=["POST", "GET"])
 def add_product():
     if request.method == "POST":
@@ -185,9 +182,7 @@ def add_product():
             model_number = int(data["model_number"])
             print(company_id)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(
-                f"SELECT * FROM product WHERE model_number = {model_number}"
-            )
+            cursor.execute(f"SELECT * FROM product WHERE model_number = {model_number}")
             account = cursor.fetchone()
             if account:
                 return {
@@ -425,5 +420,3 @@ app.run(host="localhost", port=5000, debug=True)
 #                  cursor.execute('INSERT INTO company VALUES(2,"MAC",1,"2023-05-18 15:05:00","2023-05-18 21:05:00");')
 # #     # result=cursor.fetchall()
 #                  mysql.connection.commit()
-
-

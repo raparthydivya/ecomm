@@ -1,15 +1,16 @@
-from flask import Blueprint,render_template,request,Flask
+from flask import Blueprint, render_template, request, Flask
 import pandas as pd
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 
 
-login_blueprint= Blueprint('login_blueprint', __name__)
+login_blueprint = Blueprint("login_blueprint", __name__)
 
 app = Flask(__name__)
 mysql = MySQL(app)
 
-@login_blueprint.route('/login',methods=['GET','POST'])
+
+@login_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         data = request.json
@@ -24,7 +25,6 @@ def login():
             account = cursor.fetchone()
 
             if account:
-
                 return {
                     "status": "SUCESS",
                     "message": "LOGIN  SUCESSFULLY",
@@ -40,52 +40,6 @@ def login():
                 }
     return ""
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     # if request.method == 'POST':
     #     users=pd.read_excel('open_ecommerce.xlsx', sheet_name='user_data')
     #     username = request.form.get('username')
@@ -94,7 +48,7 @@ def login():
     #     for index, row in users.iterrows():
     #         print(row['username'], row['password'])
     #         if str(username) == str(row['username']) and str(password)==str(row['password']):
-    #             return "Valid User found"   
+    #             return "Valid User found"
     #     print(username)
     #     print(password)
     #     return "NO valid user found "
