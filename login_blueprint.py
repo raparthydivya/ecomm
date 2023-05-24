@@ -13,7 +13,7 @@ mysql = MySQL(app)
 @login_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        data = request.json
+        data = request.form
         if "username" in data and "password" in data:
             username = data["username"]
             password = data["password"]
@@ -38,7 +38,7 @@ def login():
                     "data": "",
                     "traceback": "",
                 }
-    return ""
+    return render_template('login.html')
 
     # if request.method == 'POST':
     #     users=pd.read_excel('open_ecommerce.xlsx', sheet_name='user_data')

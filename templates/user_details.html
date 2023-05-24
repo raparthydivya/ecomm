@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>user details</title>
+</head>
+<body>
+    <h1>User Details</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">user_id</th>
+          <th scope="col">username</th>
+          <th scope="col">password</th>
+          <th scope="col">mobile</th>
+        </tr>
+      </thead>
+      <tbody>
+  
+        <tr>
+          <th scope="row">1</th>
+          <td><a href ="{{user.user_id}}">View</a></td>
+          <td><a href ="{{user.username}}">Edit</a></td></td>
+          <td><a href ="{{user.password}}">Delete</a></td>
+        </tr>
+
+      </tbody>
+    </table>
+    <a href="{{url_for('user_blueprint.edit_user',user_id=user_id)}}">DETAILS</a>
+</body>
+</html>

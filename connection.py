@@ -52,19 +52,7 @@ def login():
     return ""
 
 
-# username = request.form.get('username')
-#             password = request.form.get('password')
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute(
-#                         'SELECT * FROM user WHERE username = %s AND password = %s', (username, password))
-#             account = cursor.fetchone()
 
-#             if account:
-#                     return 'logged success'
-#             else:
-#                  return 'inavalid'
-#     else:
-#              return render_template('login.html')
 
 
 @app.route("/register", methods=["POST", "GET"])

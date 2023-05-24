@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, json, jsonify
+from flask import Flask, request, redirect, json, jsonify,render_template,url_for
 from login_blueprint import login_blueprint
 from register_blueprint import register_blueprint
 from company_blueprint import company_blueprint
@@ -36,7 +36,43 @@ app.register_blueprint(user_blueprint)
 
 @app.route("/")
 def hello():
-    return "Hello World"
+    return ''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @app.route("/company", methods=["POST"])
