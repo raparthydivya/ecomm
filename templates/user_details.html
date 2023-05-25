@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <title>user details</title>
+    <title>user list</title>
 </head>
 <body>
-    <h1>User Details</h1>
+    <h1>List of users</h1>
     <table class="table">
       <thead>
         <tr>
@@ -16,16 +16,18 @@
         </tr>
       </thead>
       <tbody>
-  
+        {% for user in users %}
         <tr>
+          
           <th scope="row">1</th>
-          <td><a href ="{{user.user_id}}">View</a></td>
-          <td><a href ="{{user.username}}">Edit</a></td></td>
-          <td><a href ="{{user.password}}">Delete</a></td>
+          <td>{{user.user_id}}</td>
+          <td>{{user.username}}</td></td>
+          <td>{{user.password}}</td>
         </tr>
+        {% endfor %}
 
       </tbody>
     </table>
-    <a href="{{url_for('user_blueprint.edit_user',user_id=user_id)}}">DETAILS</a>
+    <a href="{{url_for('user_blueprint.user_list',user_id=user_id,username=username),}}"></a>
 </body>
 </html>

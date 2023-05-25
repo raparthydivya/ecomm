@@ -92,7 +92,7 @@ def edit_user(user_id):
     cursor.close()
     return render_template('user.html',user=user,user_id=user_id)
 
-@user_blueprint.route('/save_user', methods=['GET','POST'])
+@user_blueprint.route('/save_user', methods=['POST'])
 def save_user():
       if request.method == "POST":
         data = request.form
@@ -107,80 +107,41 @@ def save_user():
         cursor.execute("UPDATE user SET username=%s,password=%s,mobile=%s WHERE user_id=%s", (username,password,mobile,user_id))
         mysql.connection.commit()
         cursor.close()
-        return redirect(url_for('user_blueprint.edit_user'))
+        return redirect(url_for('user_blueprint.user_list'))
       user_id=request.args.get('user_id')
       cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
       cursor.execute("SELECT * FROM user WHERE user_id=%s",(user_id,))
       user=cursor.fetchone()
       cursor.close()
-      return render_template('user.html',user=user,user_id=user_id)
+      return render_template('user_details.html',user=user,user_id=user_id)
      
-# @user_blueprint.route("/users",methods=['GET','POST'])
-# def users():
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute("SELECT * FROM user")
-#         user=cursor.fetchone()
-#         cursor.close()
-#         return render_template('user_details.html',user=user)
+@user_blueprint.route("/user_list",methods=['GET','POST'])
+def user_list():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM user")
+    users=[]
+    for row in cursor.fetchall():
+      user={
+        'user_id':row['user_id'],
+        'username':row['username'],
+        'mobile':row['mobile'],
+        'password':row['password'],
+        'created_date':row['created_date'],
+        'updated_date':row['updated_date']
+      }
+      users.append(user)
+      cursor.close()
+    return render_template('user_list.html',users=users)
     
     
 
-# @user_blueprint.route('/details', methods=['GET','POST'])
-# def get_user_details(user_id):
-#     cursor = mysql.connection.cursor()
-    
-#     cursor.execute("SELECT * FROM user WHERE user_id=%s",(user_id,))
-#     user=cursor.fetchone()
-#     cursor.close()
-#     return render_template('user_details.html',user=user)
-    
-
-    
-    
-# <h1> User  details</h1>
-#     <p><strong>username:</strong> {{ user.username}}</p>
-#     <p><strong>password:</strong> {{ user.password}}</p>
-#     <p><strong>mobile:</strong> {{ user.mobile}}</p>
-#     <a href="{{url_for('user_blueprint.edit_user')}}"></a>
-
-
-#   if "username" in data and "password" in data:
-#             username = data["username"]
-#             password = data["password"]
-#             mobile=data['mobile']
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute(
-#                 "SELECT * FROM user WHERE username = %s AND password = %s",
-#                 (username, password),
-#             )
-#             account = cursor.fetchone()
-
-#             if account:
-#                 return {
-#                     "status": "SUCESS",
-#                     "message": "LOGIN  SUCESSFULLY",
-#                     "data": "",
-#                     "traceback": "",
-#                 }
-                
-
-
-
-
-
-
-
-
-
-
-
-
-    # else:
-    #             cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #             cursor.execute(
-    #             'SELECT * FROM user WHERE user_id=%s',(user_id,))
-    #             user=cursor.fetchone()
-    #             return render_template('user.html')    
-    # return render_template('user.html')       
-    
+@user_blueprint.route('/view', methods=['GET','POST'])
+def view():
+  viewuser_id=request.args.get('user_id')
+  cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+  cursor.execute("SELECT * FROM user WHERE user_id=%s",(viewuser_id,))
+  user=cursor.fetchone()
+  return render_template('view.html',user=user)
+  
+  
     
