@@ -169,8 +169,8 @@ $(document).ready(function(){
                         <td>{{user.created_date}}</td>
                         <td>{{user.updated_date}}</td>
                         <td>
-                            <a href="{{url_for('user_blueprint.view')}}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                            <a href="{{url_for('user_blueprint.save_user')}}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <a href="" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                            <a href="{{url_for('.edit_user',user_id=user_id)}}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>

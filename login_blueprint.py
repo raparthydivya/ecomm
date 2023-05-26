@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, Flask
+from flask import Blueprint, render_template, request, Flask,session
 import pandas as pd
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -25,6 +25,10 @@ def login():
             account = cursor.fetchone()
 
             if account:
+                session['loggedin']=True
+                
+                session['username']=account['username']
+                session['user_id']=account['user_id']
                 return {
                     "status": "SUCESS",
                     "message": "LOGIN  SUCESSFULLY",
@@ -39,7 +43,7 @@ def login():
                     "traceback": "",
                 }
     return render_template('login.html')
-
+#  Excel
     # if request.method == 'POST':
     #     users=pd.read_excel('open_ecommerce.xlsx', sheet_name='user_data')
     #     username = request.form.get('username')
