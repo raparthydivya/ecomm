@@ -6,6 +6,7 @@ from product_blueprint import product_blueprint
 from cart_blueprint import cart_blueprint
 from wishlist_blueprint import wishlist_blueprint
 from user_blueprint import user_blueprint
+from home_blueprint import home_blueprint
 
 import pandas as pd
 import numpy as np
@@ -15,8 +16,8 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 
 app = Flask(__name__)
-
 app.secret_key = "key"
+
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -32,41 +33,12 @@ app.register_blueprint(product_blueprint)
 app.register_blueprint(cart_blueprint)
 app.register_blueprint(wishlist_blueprint)
 app.register_blueprint(user_blueprint)
+app.register_blueprint(home_blueprint)
 
 
 @app.route("/")
 def hello():
-    return ''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render_template('base.html')
 
 
 
@@ -82,5 +54,4 @@ if __name__ == "__main__":
     app.run(port=5004, debug=True)
 
 
-# if __name__=='__main__':
-#     app.run(debug=True)
+

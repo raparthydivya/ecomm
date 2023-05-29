@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, Flask,session
+from flask import Blueprint, render_template, request, Flask,session,redirect,flash,url_for
 import pandas as pd
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -7,12 +7,14 @@ import MySQLdb.cursors
 login_blueprint = Blueprint("login_blueprint", __name__)
 
 app = Flask(__name__)
+
 mysql = MySQL(app)
 
 
 @login_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        session.clear()
         data = request.form
         if "username" in data and "password" in data:
             username = data["username"]
@@ -29,20 +31,63 @@ def login():
                 
                 session['username']=account['username']
                 session['user_id']=account['user_id']
-                return {
-                    "status": "SUCESS",
-                    "message": "LOGIN  SUCESSFULLY",
-                    "data": "",
-                    "traceback": "",
-                }
+                return redirect("/home")
+                #     "status": "SUCESS",
+                #     "message": "LOGIN  SUCESSFULLY",
+                #     "data": "",
+                #     "traceback": "",
+                # }
             else:
-                return {
-                    "status": "FAILURE",
-                    "message": "Incorrect username or password",
-                    "data": "",
-                    "traceback": "",
-                }
+                return render_template('error.html',message=" Incorrect username or password")
+            # {
+            #         "status": "FAILURE",
+            #         "message": "Incorrect username or password",
+            #         "data": "",
+            #         "traceback": "",
+            #     }
     return render_template('login.html')
+
+
+@login_blueprint.route("/logout", methods=["GET", "POST"])
+def logout():
+    user_id=session.get('user_id')
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM user WHERE user_id=%s",(user_id,))
+    user=cursor.fetchone()
+    session.clear()
+    flash('you are logged out','success')
+    return redirect('login')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #  Excel
     # if request.method == 'POST':
     #     users=pd.read_excel('open_ecommerce.xlsx', sheet_name='user_data')

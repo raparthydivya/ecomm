@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,Flask
+from flask import Blueprint,render_template,request,Flask,session
 import pandas as pd
 from datetime import datetime
 from openpyxl import load_workbook
@@ -48,7 +48,7 @@ def add_product():
 
 
 
-@product_blueprint.route("/get_product<ids>", methods=["GET"])
+@product_blueprint.route("/get_product/<ids>", methods=["GET"])
 def get_product(ids):
     id_list = [int(id) for id in ids.split(",")]
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -78,6 +78,13 @@ def get_product(ids):
     }
     
     
+@product_blueprint.route('/view_product/<int:product_id>',methods=['GET'])
+def view_product(product_id):
+  # viewuser_id=request.args.get('user_id')
+  cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+  cursor.execute("SELECT * FROM product WHERE product_id=%s",(product_id,))
+  products=cursor.fetchone()
+  return render_template('view_product.html',product=products,product_id=product_id)
     
     
     
