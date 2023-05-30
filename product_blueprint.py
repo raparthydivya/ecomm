@@ -80,11 +80,14 @@ def get_product(ids):
     
 @product_blueprint.route('/view_product/<int:product_id>',methods=['GET'])
 def view_product(product_id):
-  # viewuser_id=request.args.get('user_id')
-  cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-  cursor.execute("SELECT * FROM product WHERE product_id=%s",(product_id,))
-  products=cursor.fetchone()
-  return render_template('view_product.html',product=products,product_id=product_id)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM product WHERE product_id=%s",(product_id,))
+    product=cursor.fetchone()
+    if not product: 
+        return " No more products available"
+    return render_template('view_product.html',product=product,product_id=product_id)
+ 
+      
     
     
     
