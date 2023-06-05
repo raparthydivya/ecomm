@@ -37,8 +37,8 @@ app.register_blueprint(home_blueprint)
 
 
 @app.route("/")
-def hello():
-    return render_template('base.html')
+def  home():
+    return render_template('home.html')
 
 
 

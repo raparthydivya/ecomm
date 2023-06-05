@@ -4,61 +4,95 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel ="stylesheet" href="view_product.css"> 
 </head>
-<body>
+<body><header>
+  {% if session.logged_in %}
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">  
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="logout">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% else %}
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">  
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="\login">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="\register">Register</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% endif %}
+    </header>
 <section class="py-5">
     <div class="container">
       <div class="row gx-5">
         <aside class="col-lg-6">
           <div class="border rounded-4 mb-3 d-flex justify-content-center">
             <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-                {% if product.product_id==1 %}
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="https://placehold.co/600x400?text=Dell%20Laptop" />
+               
+              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="{{product.image}}" />
             </a>
-            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-                {% elif product.product_id==2 %}
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="https://placehold.co/600x400?text=Boat%20Bluetooth" />
-            </a>
-            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-                {% elif product.product_id==3 %}
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="https://placehold.co/600x400?text=Mouse" />
-            </a>
-            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-                {% elif product.product_id==4 %}
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="https://placehold.co/600x400/000000/FFF?text=College%20Bag" />
-            </a>
-            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-                {% elif product.product_id==5 %}
-              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="https://placehold.co/600x400/orange/white?text=Realme%2010%20Pro%20Phone" />
-              {% else %}
-              <p><h1> No more products available</h1> </p>
-              {% endif %}
-            </a>
-
+    
+    
+        
           </div>
         </aside>
+        {% if product %}
         <main class="col-lg-6">
           <div class="ps-lg-3">
             <h4 class="title text-dark">
-                <h2>Product ID:{{product.product_id}}</h2>
-                <p>Company ID: {{product.company_id}}</p>
-                <p>Product code: {{product.product_code}}</p>
+               
                 <p>Name: {{product.name}}</p>
+                <p>Product code: {{product.product_code}}</p>
+                
                 <p>description: {{product.description}}</p>
                 <p>model number: {{product.model_number}}</p>
-                <p>Created_date : {{product.created_date}} </p>
-                <p>Updated_date : {{product.updated_date}} </p>
               </h4>
             </div>
     
             <div>
             <a href="#" class="btn btn-warning shadow-0"> Buy now </a>
-            <a href="#" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-            <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+            <a href="{{url_for('cart_blueprint.addproduct_cart',product_id=product.product_id)}}" method="post" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+            <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="bi bi-heart"></i> Wishlist </a>
             </div>
           </div>
+          {% else %}
+          <div class="container-fluid  mt-50">
+           <div class="row">
+           
+            <div class="col-md-12">
+            
+           
+              <div class="card-body cart">
+                  <div class="col-sm-12 empty-cart-cls text-center">
+                    <img src="http://shahilibas.co.in/images/NoProduct.jpg" width="82%" height="82%" class="img-fluid mb-4 mr-3">
+                    
+                    <a href="{{url_for('home_blueprint.home')}}" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Click here to go to home</a>
+                    
+                  
+                  </div>
+              </div>
+          </div>
+              
+            
+            </div>
+           
+           </div>
+         {% endif %}
+          
        </main>
-      </div>
-  
+      
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>

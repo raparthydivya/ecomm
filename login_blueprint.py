@@ -14,7 +14,6 @@ mysql = MySQL(app)
 @login_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        session.clear()
         data = request.form
         if "username" in data and "password" in data:
             username = data["username"]
@@ -22,13 +21,12 @@ def login():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(
                 "SELECT * FROM user WHERE username = %s AND password = %s",
-                (username, password),
+                (username, password)
             )
             account = cursor.fetchone()
 
             if account:
-                session['loggedin']=True
-                
+                session['logged_in']= True 
                 session['username']=account['username']
                 session['user_id']=account['user_id']
                 return redirect("/home")
@@ -56,7 +54,7 @@ def logout():
     user=cursor.fetchone()
     session.clear()
     flash('you are logged out','success')
-    return redirect('login')
+    return redirect('/home')
     
 
 

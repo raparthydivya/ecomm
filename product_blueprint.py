@@ -83,8 +83,9 @@ def view_product(product_id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT * FROM product WHERE product_id=%s",(product_id,))
     product=cursor.fetchone()
-    if not product: 
-        return " No more products available"
+    cursor.close()
+    # if not product: 
+    #     return " No more products available"
     return render_template('view_product.html',product=product,product_id=product_id)
  
       
