@@ -41,46 +41,182 @@ mysql = MySQL(app)
 #     }
     
 # mysql = MySQL(app)
-# @user_blueprint.route('/user_address', methods=['GET','POST'])
-# def user_address():
-#     if request.method == "POST":
-#         data = request.json
-#         if data and 'user_id' in data and 'street_name' in data and 'city' in data and 'state' in data and 'country' in data and 'postal_code' in data:
-#             user_id=data['user_id']
-#             street_name=data['street_name']
-#             city=data['city']
-#             state=data['state']
-#             country=data['country']
-#             postal_code=data['postal_code']
-            
-#             cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute(
-#                 'SELECT * FROM address WHERE user_id=%s AND street_name=%s AND city=%s AND state=%s AND country=%s AND postal_code=%s',(user_id,street_name,city,state,country,postal_code))
-        
-#             existing_user=cursor.fetchone()
-            
-#             if existing_user:
-#                     return{
-#                         'status':'failure',
-#                 'message':'User address already exists',
-#                 'data': '',
-#                 'traceback':''
-                        
-#                     }
-#             else:
-#                     cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#                     cursor.execute(
-#                     'INSERT INTO address(user_id,street_name,city,state,country,postal_code) VALUES(%s,%s,%s,%s,%s,%s)',(user_id,street_name,city,state,country,postal_code)
-#                     )
-#                     mysql.connection.commit()
-               
+@user_blueprint.route('/user_address', methods=['GET','POST'])
+def user_address():
+    if request.method == "POST":
+        data = request.form
+        if "logged_in" not in session or not session["logged_in"]:
+          return redirect("login")
+        else:
+           user_id=session["user_id"]
+           if data and 'user_id' in data and 'street_name' in data and 'city' in data and 'state' in data and 'country' in data and 'postal_code' in data:
+              # user_id=data['user_id']
+              street_name=data['street_name']
+              city=data['city']
+              state=data['state']
+              country=data['country']
+              postal_code=data['postal_code']
+              
+              cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+              cursor.execute(
+                  f'SELECT * FROM address WHERE user_id={user_id} AND street_name=%s AND city=%s AND state=%s AND country=%s AND postal_code={postal_code}',(street_name,city,state,country))   
+              existing_user=cursor.fetchone()
+              
+              if existing_user:
+                # return ''
+                return 'Address already exists'
+                #  message = "Address already exists"
+              # alert_class = "warning"
+                    
+              else:
+                      cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                      cursor.execute(
+                      'INSERT INTO address(user_id,street_name,city,state,country,postal_code) VALUES(%s,%s,%s,%s,%s,%s)',(user_id,street_name,city,state,country,postal_code)
+                      )
+                      print(cursor.execute)
+                      mysql.connection.commit()
+                      cursor.close()
+                      # message = "Address successfully added"
+                      # alert_class = "success"
+                      # return 'address '
+                      return redirect('home')
 
-#             return {
-#                 'status':'sucess',
-#                 'message':'User address added successfully',
-#                 'data': '',
-#                 'traceback':''
-#                 }
+      
+    return render_template('address.html')
+ 
+
+@user_blueprint.route("/add_address", methods=["POST","GET"])
+def add_address():
+  if request.method == "POST":
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect("login")
+    else:
+    
+        data = request.form
+        user_id = session["user_id"]
+        street_name=data['street_name']
+        city=data['city']
+        state=data['state']
+        country=data['country']
+        postal_code=data['postal_code']
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+                    f'SELECT * FROM address WHERE user_id={user_id} AND street_name=%s AND city=%s AND state=%s AND country=%s AND postal_code={postal_code}',(street_name,city,state,country))   
+        existing_user=cursor.fetchone()
+              
+        if existing_user:
+          message = "Address already exists"
+          alert_class = "warning"
+          return redirect(url_for('.view_address',message=message,alert_class=alert_class))
+        
+        else:
+          user_id = session["user_id"]
+          cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+          cursor.execute(
+          'INSERT INTO address(user_id,street_name,city,state,country,postal_code) VALUES(%s,%s,%s,%s,%s,%s)',(user_id,street_name,city,state,country,postal_code)
+          )
+          mysql.connection.commit()
+          cursor.close()
+          message = "Address successfully added "
+          alert_class = "success"
+        return redirect(url_for('user_blueprint.view_address',message=message,alert_class=alert_class))
+        
+  return render_template('add_address.html')
+     
+  
+@user_blueprint.route("/view_address", methods=["GET"])
+def view_address():
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect("login")
+    else:
+        user_id = session["user_id"]
+        message = request.args.get("message",'')
+        alert_class=request.args.get('alert_class')
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM address WHERE user_id={user_id}")
+        addresses=cursor.fetchall()
+        cursor.close()
+        
+    return render_template('view_address.html',addresses=addresses,message=message,alert_class=alert_class)
+  # message=message,alert_class=alert_class
+ 
+ 
+@user_blueprint.route("/edit_address/<int:address_id>", methods=["GET","POST"])
+def edit_address(address_id):
+  print(address_id)
+  if "logged_in" not in session or not session["logged_in"]:
+        return redirect("login")
+  else:
+      user_id=session['user_id']
+      cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+      cursor.execute(f"SELECT * FROM address WHERE address_id={address_id}")
+      address=cursor.fetchone()
+      cursor.close()
+      
+      return render_template('edit_address.html',address=address)
+      
+
+@user_blueprint.route('/save_address/<int:address_id>', methods=['POST'])
+def save_address(address_id):
+      if request.method == "POST":
+        if "logged_in" not in session or not session["logged_in"]:
+           return redirect("login")
+        else:
+          data = request.form
+          user_id = session["user_id"]
+          street_name=data['street_name']
+          city=data['city']
+          state=data['state']
+          country=data['country']
+          postal_code=data['postal_code']
+          cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+          cursor.execute(f"UPDATE address SET street_name=%s,city=%s,state=%s,country=%s,postal_code=%s WHERE address_id={address_id}", (street_name,city,state,country,postal_code))
+          mysql.connection.commit()
+          cursor.close()
+          message='address updated successfullly'
+          alert_class='success'
+          return redirect(url_for('user_blueprint.view_address',message=message,alert_class=alert_class))
+
+          
+      return render_template('address.html',address_id=address_id)
+      
+
+  
+@user_blueprint.route("/delete_address/<int:address_id>", methods=["GET","POST"])
+def delete_address(address_id):
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect("login")
+    else:
+        user_id = session["user_id"]
+        # address_id = request.form.get("address_id")
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            f" DELETE FROM address WHERE address_id={address_id} AND user_id={user_id}"
+        )
+        mysql.connection.commit()
+        cursor.close()
+        message="Product successfully removed from your cart"
+        alert_class='success'
+        return redirect(url_for("user_blueprint.view_address",))
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
         
 @user_blueprint.route('/edit_user/<int:user_id>', methods=['GET','POST'])
 def edit_user(user_id):

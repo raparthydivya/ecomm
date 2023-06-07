@@ -60,8 +60,8 @@ def view_cart():
         return redirect("login")
     else:
         user_id = session["user_id"]
-        message = request.args["message"]
-        alert_class=request.args['alert_class']
+        message = request.args.get("message",'')
+        alert_class=request.args.get('alert_class')
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
             f"SELECT c.*,p.image,p.name FROM cart AS c JOIN product as p ON p.product_id=c.product_id WHERE c.user_id={user_id}"

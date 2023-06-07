@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Address</title>
+</head>
+<body>
+  <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
+
+<div class="col-md-8 mb-4" >
+    <div class="card mb-4">
+      <div class="card-header py-3">
+        <h5 class="mb-0 text-font text-uppercase">Delivery address</h5>
+      </div>
+      <div class="card-body">
+        <form action="{{url_for('user_blueprint.save_address',address_id=address.address_id)}}" method='POST'>
+          <div class="mb-3 mt-3">
+  
+            <label for="username">street_name:</label>
+            <input type="text" class="form-control" id="street_name" placeholder="" name="street_name" value="{{address.street_name}}" >
+          </div>
+          <div class="mb-3">
+            <label for="pwd">city:</label>
+            <input type="text" class="form-control" id="city" placeholder="" name="city" value="{{address.city}} ">
+          </div>
+          <div class="mb-3">
+            <label for="state">state:</label>
+            <input type="text" class="form-control" id="state" placeholder="" name="state"  value="{{address.state}}">
+          </div>
+          <div class="mb-3">
+            <label for="pwd">country:</label>
+            <input type="text" class="form-control" id="country" placeholder="" name="country" value="{{address.country}}">
+          </div>
+          <div class="mb-3">
+            <label for="mobile">postal_code:</label>
+            <input type="text" class="form-control" id="postal_code" placeholder="" name="postal_code"  value="{{address.postal_code}}">
+          </div>
+          <div class="form-group">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+
+  
+  </div>
+</form>
+     
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+</body>
+</html>
