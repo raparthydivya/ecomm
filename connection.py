@@ -388,7 +388,9 @@ app.run(host="localhost", port=5000, debug=True)
 # CREATE TABLE address(
 #           address_id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL,street_name varchar(255) NOT NULL,city varchar(255) NOT NULL,state varchar(255) NOT NULL,country varchar(255) NOT NULL,postal_code varchar(255) NOT NULL,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 #     PRIMARY KEY(address_id))
-
+# CREATE TABLE orders(
+#     order_id int NOT NULL AUTO_INCREMENT,user_id int NOT NULL,product_id int NOT NULL,address_id int NOT NULL,status varchar(255) NOT NULL ,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY_KEY(order_id)
+# )
 
 # mysql -u root -p
 

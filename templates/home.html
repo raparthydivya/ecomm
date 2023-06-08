@@ -52,8 +52,7 @@
           </div>
         </div>
       </nav>
-      {% endif %} 
-     
+      {% endif %}     
     </header>
       <header>
         <div class="bg-primary text-white py-2">
@@ -86,11 +85,11 @@
                   <h5 class="card-title">{{product.name}}</h5>
     
   
-                  <p class="card-text">$790.50</p>
+                  <p class="card-text">₹{{product.amount}}</p>
                   <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
                     <a href="{{url_for('cart_blueprint.addproduct_cart',product_id=product.product_id)}}" method="post" class="btn btn-primary shadow-0 me-1">Add to cart</a>
                     
-                    <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                    <a href="{{url_for('order_blueprint.place_order',product_id=product.product_id)}}" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i> Buy Now</a>
                   </div>
                 </div>
               </div>

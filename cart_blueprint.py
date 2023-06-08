@@ -64,12 +64,12 @@ def view_cart():
         alert_class=request.args.get('alert_class')
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            f"SELECT c.*,p.image,p.name FROM cart AS c JOIN product as p ON p.product_id=c.product_id WHERE c.user_id={user_id}"
+            f"SELECT c.*,p.image,p.name,p.amount FROM cart AS c JOIN product as p ON p.product_id=c.product_id WHERE c.user_id={user_id}"
         )
         cart_items = cursor.fetchall()
         cursor.close()
-        print(cart_items)
-        print(user_id)
+        # print(cart_items)
+        # print(user_id)
 
     return render_template(
         "cart.html",message=message,alert_class=alert_class,

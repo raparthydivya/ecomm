@@ -195,7 +195,7 @@ $(document).ready(function(){
                         <div class="col-sm-8"><h2> <b>Your Address Details</b></h2></div>
                         <div class="col-sm-4">
                             <a href="{{url_for('.add_address')}}">
-                            <div class="search-box">
+                            <div class="address">
                                 <button style="font-size:20px;color:Black">ADD address <i class=""></i></button>
                                  </a>
                                 
@@ -230,7 +230,23 @@ $(document).ready(function(){
                         {% endfor %}
                     </tbody>
                     {% else %}
-                    <p> add address</p>
+                    <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
+<div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h2> <b>ADD your Address Details</b></h2></div>
+                        <div class="col-sm-4">
+                            <a href="{{url_for('.add_address')}}">
+                            <div class="address">
+                                <button style="font-size:20px;color:Black">ADD address <i class=""></i></button>
+                                 </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     {% endif %}
                     
 

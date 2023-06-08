@@ -65,13 +65,19 @@
         <tr>
           <th scope="row"></th>
           <td><img width="100" src="{{item.image}}" alt="product.image" /></td>
+          
 
           <td>{{item.name}}</td>
           <td>
+            <a>amount = ₹{{item.amount}}</a>
             <form action="{{url_for('cart_blueprint.delete_cart')}}" method='POST'>
               <input type="hidden" name="product_id" value="{{item.product_id}}">
             <button type="submit" class="btn btn-danger"><span class="bi bi-trash red-color"></span></button>
             </form>
+   
+            <a href="{{url_for('order_blueprint.place_order',product_id=item.product_id)}}" class="btn btn-primary shadow-0 me-1"> Place Order</a>
+            <input type="hidden" name="product_id" value="{{item.product_id}}">
+              
           </td>
         </tr>
         <tr>

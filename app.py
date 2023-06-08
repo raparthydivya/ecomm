@@ -7,6 +7,8 @@ from cart_blueprint import cart_blueprint
 from wishlist_blueprint import wishlist_blueprint
 from user_blueprint import user_blueprint
 from home_blueprint import home_blueprint
+from order_blueprint import order_blueprint
+
 
 import pandas as pd
 import numpy as np
@@ -34,6 +36,7 @@ app.register_blueprint(cart_blueprint)
 app.register_blueprint(wishlist_blueprint)
 app.register_blueprint(user_blueprint)
 app.register_blueprint(home_blueprint)
+app.register_blueprint(order_blueprint)
 
 
 @app.route("/")
