@@ -29,6 +29,7 @@ def login():
                 session['logged_in']= True 
                 session['username']=account['username']
                 session['user_id']=account['user_id']
+                session['usertype']='user'
                 return redirect("/home")
                 #     "status": "SUCESS",
                 #     "message": "LOGIN  SUCESSFULLY",

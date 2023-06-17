@@ -195,9 +195,9 @@ def delete_address(address_id):
         )
         mysql.connection.commit()
         cursor.close()
-        message="Product successfully removed from your cart"
+        message="Address successfully removed"
         alert_class='success'
-        return redirect(url_for("user_blueprint.view_address",))
+        return redirect(url_for("user_blueprint.view_address",message=message,alert_class=alert_class))
 
  
  

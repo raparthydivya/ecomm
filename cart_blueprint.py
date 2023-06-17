@@ -24,7 +24,6 @@ mysql = MySQL(app)
 @cart_blueprint.route("/addproduct_cart/<int:product_id>", methods=["GET"])
 def addproduct_cart(product_id):
     if "logged_in" not in session or not session["logged_in"]:
-        print(session)
         return redirect(url_for("login_blueprint.login"))
     else:
         if product_id:

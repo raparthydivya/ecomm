@@ -41,7 +41,7 @@ app.register_blueprint(order_blueprint)
 
 @app.route("/")
 def  home():
-    return render_template('home.html')
+    return redirect(url_for('home_blueprint.home'))
 
 
 

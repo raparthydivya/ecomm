@@ -16,15 +16,16 @@ mysql = MySQL(app)
 
 @home_blueprint.route("/home", methods=["GET", "POST"])
 def home():
+   current_page='home'
    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
    cursor.execute(
-                    "SELECT * FROM product limit 8"
+                    "SELECT * FROM product limit 12"
                   
                 )
    products = cursor.fetchall()
    # product_id=request.args.get('product_id')
    cursor.close()
-   return render_template('home.html',products=products)
+   return render_template('home.html',products=products,current_page=current_page)
   
 # @home_blueprint.route("/addproduct_cart/<int:product_id>")
 # def addproduct_cart(product_id):

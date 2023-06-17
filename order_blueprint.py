@@ -41,24 +41,21 @@ def submit_order(product_id):
            return redirect("login")
         
         else:
+          cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
+          cursor.execute(f"SELECT * FROM product WHERE product_id={product_id}")
+          product= cursor.fetchone()
           user_id = session["user_id"]
           address_id=request.form.get('address_id')
           status='order placed'
           cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
           cursor.execute(
-                    "INSERT INTO orders (user_id,product_id,address_id,status) VALUES (%s,%s,%s,%s)",(user_id,product_id,address_id,status)
+                    "INSERT INTO orders (user_id,product_id,amount,address_id,status) VALUES (%s,%s,%s,%s,%s)",(user_id,product_id,product['amount'],address_id,status)
             
                   )
           mysql.connection.commit()
           cursor.close()
           message='Order placed successfullly'
           alert_class='success'
-          
-        #   if not address_id:
-        #       message="Please the address"
-        #       alert_class='warning'
-        #       return redirect(url_for('order.html',message=message,alert_class=alert_class))
-        #   print(address_id)
           
         return redirect(url_for("order_blueprint.view_order",message=message,alert_class=alert_class))
         #   return render_template('order.html',message=message,alert_class=alert_class,product_id=product_id,)
@@ -73,7 +70,7 @@ def view_order():
           alert_class=request.args.get('alert_class')
           cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
           cursor.execute(
-            f"SELECT o.*,a.*,p.image,p.name,p.amount FROM orders AS o JOIN address AS a ON o.address_id=a.address_id JOIN product as p ON o.product_id=p.product_id WHERE o.user_id={user_id}"
+            f"SELECT o.*,a.*,p.image,p.name FROM orders AS o JOIN address AS a ON o.address_id=a.address_id JOIN product as p ON o.product_id=p.product_id WHERE o.user_id={user_id}"
            )
           orders = cursor.fetchall()
           cursor.close()

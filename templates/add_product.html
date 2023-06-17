@@ -1,0 +1,92 @@
+{% include 'sidebar.html' %}
+
+
+  <body>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="container center_div">
+        
+<form action="{{url_for('company_blueprint.company_add_product',company_user_id=company_user_id)}}" method='POST' class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend> <center>ADD PRODUCT </center></legend>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+  <div class="col-md-4">
+  <input id="product_name" name="name" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+<div class="form-group">
+    <label class="col-md-4 control-label" for="product_name">PRODUCT CODE</label>  
+    <div class="col-md-4">
+    <input id="product_name" name="product_code" placeholder="PRODUCT CODE" class="form-control input-md" required="" type="text">
+      
+    </div>
+  </div>
+
+<!-- Text input-->
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
+  <div class="col-md-4">
+    <input id="product_name_fr" name="categories" placeholder="PRODUCT CATEGORY" class="form-control input-md" required="" type="text">
+    
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="available_quantity">AMOUNT</label>  
+  <div class="col-md-4">
+  <input id="available_quantity" name="amount" placeholder="AMOUNT" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="product_description" name="description"></textarea>
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+    <label class="col-md-4 control-label" for="product_weight">MODEL NUMBER</label>  
+    <div class="col-md-4">
+    <input id="model_number" name="model_number" placeholder="MODEL NUMBER" class="form-control input-md" required="" type="text">
+      
+    </div>
+  </div>
+
+ <!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="filebutton">IMAGE</label>
+  <div class="col-md-4">
+    <input id="filebutton" name="image" class="form-control input-md" type="text">
+  </div>
+</div>
+
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-primary">ADD PRODUCT</button>
+  </div>
+  </div>
+
+</fieldset>
+</div>
+</form>
+</main>
+</body>
+</html>

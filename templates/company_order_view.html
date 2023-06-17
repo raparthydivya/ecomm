@@ -1,0 +1,86 @@
+{% include 'sidebar.html' %}
+ 
+    
+    
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      
+    
+
+     
+
+      <h2>List of all Orders</h2>
+      <div class="table-responsive">
+        
+        {% if orders %}
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Product Name</th>
+          <th scope="col">IMAGE</th>
+          <th scope="col">users</th>
+          <th scope="col">Address</th>
+          <th scope="col">Status</th>
+          <th scope="col">Amount</th>
+          <th scope="col">View</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <th scope="row"></th>
+        
+          
+
+          <td>{{order.name}}</td>
+          <td><img width="100" src="{{order.image}}" alt="order.image" /> </a></td>
+          <td>{{order.username}}</td>
+          <td>{{order.address_id}},{{order.street_name}},
+            {{order.city}},
+            {{order.state}},
+            {{order.country}},
+            {{order.postal_code}}</td>
+            <td>{% if order.status == 'Order Accepted'%}
+              <span class="badge bg-success fs-6">Order Accepted</span>
+              {% elif order.status == 'Order Shipped'%}
+              <span class="badge bg-primary fs-6">Order Shipped</span>
+              {% elif order.status == 'Order Delivered'%}
+              <span class="badge bg-info fs-6">Order Delivered</span>
+              {% elif order.status == 'Order Rejected'%}
+              <span class="badge bg-danger fs-6">Order Rejected</span>
+              {% endif %}</td>
+          <td>{{order.amount}}</td>
+          <td>
+            <a href="{{url_for('company_blueprint.company_order',order_id=order.order_id)}}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+          
+        </tr>
+        <tr>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  {% else %}
+  <div class="container-fluid  mt-50">
+    <div class="row">
+    
+     <div class="col-md-12">
+       <div class="card-body cart">
+           <div class="col-sm-12 empty-cart-cls text-center">
+             <h3><strong>NO orders</strong></h3>
+          
+           </div>
+       </div>
+   </div>
+       
+     
+     </div>
+    
+    </div>
+   
+   </div>
+     
+    {% endif%}
+      </div>
+    </main>
