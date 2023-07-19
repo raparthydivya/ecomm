@@ -395,12 +395,19 @@ app.run(host="localhost", port=5000, debug=True)
 #      company_user_id int NOT NULL AUTO_INCREMENT,company_id int NOT NULL,name varchar(255) NOT NULL, username varchar(255) NOT NULL,password varchar(255) NOT NULL,role varchar(255) NOT NULL,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(company_user_id)
 # )
 #  )
+# CREATE TABLE category(
+#     category_id int NOT NULL AUTO_INCREMENT,category_name varchar(255) NOT NULL,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(category_id))
+
+# CREATE TABLE sub_category(
+#     sub_category_id int NOT NULL AUTO_INCREMENT,category_id int NOT NULL,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(sub_category_id))
 
 
 
 
 
+# INSERT INTO category VALUES(1,Electronics,"2023-07-13 13:38:00","2023-07-13 13:38:00")
 
+# INSERT INTO sub_category VALUES(1,1,"2023-07-13 13:38:00","2023-07-13 13:38:00")
 
 
 

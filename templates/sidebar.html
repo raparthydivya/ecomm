@@ -160,7 +160,7 @@
     {% if session.logged_in %}
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Company name</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"><b>Company name</b></a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -180,7 +180,7 @@
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="/company/login">Sign In</a>
+      <a class="nav-link px-3" href="/company/company_login">Sign In</a>
     </div> 
   </div>
   {% endif %}
@@ -191,53 +191,31 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-body-tertiary sidebar collapse">
       <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-              <span data-feather="home" class="align-text-bottom"></span>
-              Dashboard
-            </a>
+          <li class="nav-item {% if current_page =='dashboard' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='dashboard' %} active {% endif %}" aria-current="page" href=""><span data-feather="file" class="align-text-bottom"></span>Dashboard</a>
+              </ul>
           </li>
-          <li class="nav-item">
-            {% if current_page!='home' %}
-            <a class="nav-link" href="/company/home">
-              <span data-feather="file" class="align-text-bottom"></span>
-              Home
-            </a>
-            {% endif %}
+          <li class="nav-item {% if current_page =='home' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='home' %} active {% endif %}" aria-current="page" href="/company/home"><span data-feather="file" class="align-text-bottom"></span>Home</a>
+              </ul>
           </li>
-          <li class="nav-item">
-            {% if current_page!='orders' %}
-            <a class="nav-link" href="/company/view_orders">
-              <span data-feather="file" class="align-text-bottom"></span>
-              Orders
-            </a>
-            {% endif %}
+          <li class="nav-item {% if current_page =='orders' %}active{% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='orders' %}active{% endif %}" aria-current="page" href="/company/view_orders"><span data-feather="file" class="align-text-bottom"></span>Orders</a>
+              </ul>
           </li>
-          <li class="nav-item">
-            {% if current_page!='products' %}
-            <a class="nav-link" href="/company/products">
-              <span data-feather="shopping-cart" class="align-text-bottom"></span>
-              Products
-            </a>
-            {% endif %}
+          <li class="nav-item  {% if current_page=='products' %}active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='products' %}active{% endif %}" aria-current="page" href="/company/products"><span data-feather="file" class="align-text-bottom"></span>Products</a>
+              </ul>
+           
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users" class="align-text-bottom"></span>
-              Customers
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-              Reports
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="layers" class="align-text-bottom"></span>
-              Integrations
-            </a>
+          <li class="nav-item {% if current_page =='customers' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='customers' %} active {% endif %}" aria-current="page" href="/company/home"><span data-feather="file" class="align-text-bottom"></span>Customers</a>
+              </ul>
           </li>
           
         </ul>

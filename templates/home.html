@@ -95,58 +95,27 @@
                   <h5 class="card-title">{{product.name}}</h5>
     
       
-                  <p class="card-text">₹{{product.amount}}</p> <a href="{{url_for('wishlist_blueprint.addproduct_wishlist',product_id=product.product_id)}}" method="post" class="bi bi-heart"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg></a>
+                  <p class="card-text">₹{{product.amount}}</p> 
                   <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                  
                     <a href="{{url_for('cart_blueprint.addproduct_cart',product_id=product.product_id)}}" method="post" class="btn btn-primary shadow-0 me-1">Add to cart</a>
+
                     
                     <a href="{{url_for('order_blueprint.place_order',product_id=product.product_id)}}" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i> Buy Now</a>
+                    <a href="{{url_for('wishlist_blueprint.addproduct_wishlist',product_id=product.product_id)}}"class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                      <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                    </svg></i></a>
+
                   </div>
                 </div>
               </div>
             </div>
             {% endfor %}
 
-            <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-              <div class="card w-100 my-2 shadow-2-strong">
-                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/2.webp" class="card-img-top" style="aspect-ratio: 1 / 1" />
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">Canon camera 20x zoom, Black color EOS 2000</h5>
-                  <p class="card-text">$320.00</p>
-                  <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                    <a href="#!" class="btn btn-primary shadow-0 me-1">Add to cart</a>
-                    <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-              <div class="card w-100 my-2 shadow-2-strong">
-                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/3.webp" class="card-img-top" style="aspect-ratio: 1 / 1" />
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">Xiaomi Redmi 8 Original Global Version 4GB</h5>
-                  <p class="card-text">$120.00</p>
-                  <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                    <a href="#!" class="btn btn-primary shadow-0 me-1">Add to cart</a>
-                    <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-              <div class="card w-100 my-2 shadow-2-strong">
-                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/4.webp" class="card-img-top" style="aspect-ratio: 1 / 1" />
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">Apple iPhone 12 Pro 6.1" RAM 6GB 512GB Unlocked</h5>
-                  <p class="card-text">$120.00</p>
-                  <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                    <a href="#!" class="btn btn-primary shadow-0 me-1">Add to cart</a>
-                    <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
+           
+            
           </div>
         </div>
       </section>
@@ -243,81 +212,8 @@
       </section>
       <!-- Feature -->
       
-      <!-- Blog -->
-      <section class="mt-5 mb-4">
-        <div class="container text-dark">
-          <header class="mb-4">
-            <h3>Blog posts</h3>
-          </header>
+
       
-          <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-              <article>
-                <a href="#" class="img-fluid">
-                  <img class="rounded w-100" src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/posts/1.webp" style="object-fit: cover;" height="160" />
-                </a>
-                <div class="mt-2 text-muted small d-block mb-1">
-                  <span>
-                    <i class="fa fa-calendar-alt fa-sm"></i>
-                    23.12.2022
-                  </span>
-                  <a href="#"><h6 class="text-dark">How to promote brands</h6></a>
-                  <p>When you enter into any new area of science, you almost reach</p>
-                </div>
-              </article>
-            </div>
-            <!-- col.// -->
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-              <article>
-                <a href="#" class="img-fluid">
-                  <img class="rounded w-100" src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/posts/2.webp" style="object-fit: cover;" height="160" />
-                </a>
-                <div class="mt-2 text-muted small d-block mb-1">
-                  <span>
-                    <i class="fa fa-calendar-alt fa-sm"></i>
-                    13.12.2022
-                  </span>
-                  <a href="#"><h6 class="text-dark">How we handle shipping</h6></a>
-                  <p>When you enter into any new area of science, you almost reach</p>
-                </div>
-              </article>
-            </div>
-            <!-- col.// -->
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-              <article>
-                <a href="#" class="img-fluid">
-                  <img class="rounded w-100" src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/posts/3.webp" style="object-fit: cover;" height="160" />
-                </a>
-                <div class="mt-2 text-muted small d-block mb-1">
-                  <span>
-                    <i class="fa fa-calendar-alt fa-sm"></i>
-                    25.11.2022
-                  </span>
-                  <a href="#"><h6 class="text-dark">How to promote brands</h6></a>
-                  <p>When you enter into any new area of science, you almost reach</p>
-                </div>
-              </article>
-            </div>
-            <!-- col.// -->
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-              <article>
-                <a href="#" class="img-fluid">
-                  <img class="rounded w-100" src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/posts/4.webp" style="object-fit: cover;" height="160" />
-                </a>
-                <div class="mt-2 text-muted small d-block mb-1">
-                  <span>
-                    <i class="fa fa-calendar-alt fa-sm"></i>
-                    03.09.2022
-                  </span>
-                  <a href="#"><h6 class="text-dark">Success story of sellers</h6></a>
-                  <p>When you enter into any new area of science, you almost reach</p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Blog -->
       
     <div class='container'>
      

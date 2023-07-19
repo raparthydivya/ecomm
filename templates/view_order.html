@@ -93,7 +93,18 @@
             {{order.country}},
             {{order.postal_code}}</td>
         <td> ₹{{order.amount}}</td>
-          <td>{{order.status}}</td>
+          <td>{% if order.status == 'Order Accepted'%}
+            <span class="badge bg-success fs-6">Order Accepted</span>
+            {% elif order.status == 'Order Shipped'%}
+            <span class="badge bg-primary fs-6">Order Shipped</span>
+            {% elif order.status == 'Order Delivered'%}
+            <span class="badge bg-info fs-6">Order Delivered</span>
+            {% elif order.status == 'Order Rejected'%}
+            <span class="badge bg-danger fs-6">Order Rejected</span>
+            {% else %}
+            <span class="badge bg-primary fs-6">Order Placed</span>
+
+            {% endif %}</td>
           <td>{{order.created_date}}</td>
         </tr>
         {% endfor %}

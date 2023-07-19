@@ -1,4 +1,5 @@
 {% include 'navbar.html' %}
+<body>
 <section class="py-5">
     <div class="container">
       <div class="row gx-5">
@@ -25,9 +26,9 @@
             </div>
     
             <div>
-            <a href="#" class="btn btn-warning shadow-0"> Buy now </a>
+            <a href="{{url_for('order_blueprint.place_order',product_id=product.product_id)}}" class="btn btn-warning shadow-0"> Buy now </a>
             <a href="{{url_for('cart_blueprint.addproduct_cart',product_id=product.product_id)}}" method="post" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-            <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="bi bi-heart"></i> Wishlist </a>
+            <a href="{{url_for('wishlist_blueprint.addproduct_wishlist',product_id=product.product_id)}}" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="bi bi-heart"></i> Wishlist </a>
             </div>
           </div>
           {% else %}

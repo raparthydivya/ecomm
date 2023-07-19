@@ -50,6 +50,8 @@
               <span class="badge bg-info fs-6">Order Delivered</span>
               {% elif order.status == 'Order Rejected'%}
               <span class="badge bg-danger fs-6">Order Rejected</span>
+              {% else %}
+              <span class="badge badge-light fs-6">Order Placed</span>
               {% endif %}</td>
           <td>{{order.amount}}</td>
           <td>

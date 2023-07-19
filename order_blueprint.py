@@ -13,7 +13,7 @@ mysql = MySQL(app)
 @order_blueprint.route("/place_order/<int:product_id>", methods=["POST","GET"])
 def place_order(product_id):   
         if "logged_in" not in session or not session["logged_in"]:
-            return redirect("login")
+            return redirect("/login")
         else:
     
                 user_id = session["user_id"]

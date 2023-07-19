@@ -86,17 +86,18 @@
             {% endif %}
             {% endfor %}       
             <td>
-            <ul>
+            <select name='address_id' class="btn btn-info dropdown-toggle-secondary btn-lg dropdown-toggle">
+             
                 {% for address in addresses %}
-                <li>
-                    <input type="radio" name="address_id" value="{{address.address_id}}" required>{{address.street_name}},
-                    {{address.city}},
-                    {{address.state}},
-                    {{address.country}},
-                    {{address.postal_code}}
+                <option value="{{address.address_id}}" class="badge bg-primary fs-6">{{address.street_name}},
+                  {{address.city}},
+                  {{address.state}},
+                  {{address.country}},
+                  {{address.postal_code}}</option>
+                
                 {% endfor %}
-                </li>
-              </ul>  
+                </select>
+             
               </td>
               <td>
                 <a>amount = ₹{{products.amount}}</a>

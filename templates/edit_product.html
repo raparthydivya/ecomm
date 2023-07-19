@@ -6,10 +6,10 @@
     <div class="container mt-3">
         <h2>EDIT PRODUCT DETAILS</h2>
         
-        <form action="{{url_for('company_blueprint.save_product',product_id=product_id,product=product)}}" method='POST'>
+        <form action="{{url_for('company_blueprint.save_product',product_id=product_id,product=product,category=category,sub_category=sub_category)}}" method='POST'>
           <input type="hidden" name="user_id" value="{{user_id}}">
           <div class="mb-3 mt-3">
-  
+
             <label for="name">name:</label>
             <input type="name" class="form-control" id="name"  name="name" value="{{product.name}}" >
           </div>
@@ -33,8 +33,25 @@
             <label for="model_number">model_number:</label>
             <input type="model_number" class="form-control" id="model_number" name="model_number"  value="{{product.model_number}}">
           </div>
-          
+         
+          <div class="mb-3">
+            <label for="category">Category:</label>
+            <select name="category_id" id="category" class="btn btn-secondary dropdown-toggle-secondary">
+              {% for c in category %}
+              <optgroup label="{{c['category_name']}}">
+                {% for sb in sub_category %}
+                {% if c['category_id'] == sb['category_id'] %}
+                <option value="{{c['category_id']}}|{{sb['sub_category_id']}}">{{sb['sub_category_name']}}</option>
+                {% endif %}
+                {% endfor %}
+                
+              </optgroup>
+              {% endfor %}
+              
+            </select> 
+        </div>
           <button type="submit" class="btn btn-primary">Submit</button>
+          <a href='/company/products'><button type="button" class="btn btn-danger">Cancel</button> </a>
         </form>
       </div>
       

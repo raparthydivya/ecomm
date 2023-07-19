@@ -16,8 +16,10 @@ def login():
     if request.method == "POST":
         data = request.form
         if "username" in data and "password" in data:
-            username = data["username"]
-            password = data["password"]
+            message = request.args.get("message",'')
+            alert_class=request.args.get('alert_class')
+            username = request.form["username"]
+            password = request.form["password"]
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(
                 "SELECT * FROM user WHERE username = %s AND password = %s",
@@ -37,7 +39,9 @@ def login():
                 #     "traceback": "",
                 # }
             else:
-                return render_template('error.html',message=" Incorrect username or password")
+                message='Incorrect username or password'
+                alert_class='warning'
+                return render_template('login.html',message=message,alert_class=alert_class)
             # {
             #         "status": "FAILURE",
             #         "message": "Incorrect username or password",
