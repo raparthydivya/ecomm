@@ -23,7 +23,7 @@ mysql = MySQL(app)
 
 @cart_blueprint.route("/addproduct_cart/<int:product_id>", methods=["GET"])
 def addproduct_cart(product_id):
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect(url_for("login_blueprint.login"))
     else:
         if product_id:
@@ -55,7 +55,7 @@ def addproduct_cart(product_id):
 
 @cart_blueprint.route("/view_cart", methods=["GET"])
 def view_cart():
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]
@@ -78,7 +78,7 @@ def view_cart():
 
 @cart_blueprint.route("/delete_cart", methods=["POST"])
 def delete_cart():
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]

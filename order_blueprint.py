@@ -12,7 +12,7 @@ mysql = MySQL(app)
 
 @order_blueprint.route("/place_order/<int:product_id>", methods=["POST","GET"])
 def place_order(product_id):   
-        if "logged_in" not in session or not session["logged_in"]:
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
             return redirect("/login")
         else:
     
@@ -37,7 +37,7 @@ def place_order(product_id):
 @order_blueprint.route("/submit_order/<int:product_id>", methods=["POST","GET"])
 def submit_order(product_id):
     if request.method == "POST":
-        if "logged_in" not in session or not session["logged_in"]:
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
            return redirect("login")
         
         else:
@@ -62,7 +62,7 @@ def submit_order(product_id):
 
 @order_blueprint.route("/view_order", methods=["GET"])
 def view_order():
-        if "logged_in" not in session or not session["logged_in"]:
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
            return redirect("login")
         else:
           user_id = session["user_id"]

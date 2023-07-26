@@ -41,7 +41,7 @@ def company_home():
 # company_user_id=company_user_id,company_id=company_id
 
 
-@company_blueprint.route("/company/company_login", methods=["GET", "POST"])
+@company_blueprint.route("/company/login", methods=["GET", "POST"])
 def company_login():
     if request.method == "POST":
         data = request.form
@@ -71,7 +71,7 @@ def company_login():
                 session["logged_in"] = True
                 session["username"] = account["username"]
                 session["company_user_id"] = account["company_user_id"]
-                session["usertype"] = "companyuser"
+                session["usertype"] = "company_user"
 
             if company:
                 session["company_id"] = company["company_id"]
@@ -120,7 +120,7 @@ def company_register():
             )
             mysql.connection.commit()
             last_insert_id = cursor.lastrowid
-            print(last_insert_id)
+            # print(last_insert_id)
             cursor.execute(
                 "INSERT INTO company_users(company_id,name,username,password,role) VALUES(%s,%s,%s,%s,%s)",
                 (last_insert_id, name, username, password, role),
@@ -144,8 +144,8 @@ def company_logout():
 def company_products():
     current_page = "products"
     # validate_login()
-    if "logged_in" not in session or not session["logged_in"]:
-        return redirect(url_for("/company/company_login"))
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+        return redirect(url_for(".company_login"))
     else:
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
@@ -239,8 +239,8 @@ def company_edit_product(product_id):
 def save_product(product_id):
     current_page = "products"
     if request.method == "POST":
-        if "logged_in" not in session or not session["logged_in"]:
-            return redirect("company_login")
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+            return redirect(url_for(".company_login"))
         else:
             data = request.form
             company_user_id = session["company_user_id"]
@@ -346,8 +346,8 @@ def company_add_product():
                 
             ]
     
-    if "logged_in" not in session or not session["logged_in"]:
-            return redirect("company_login")
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+            return redirect(url_for(".company_login"))
     else:
         if request.method == "POST":
         
@@ -415,8 +415,8 @@ def company_add_product():
 @company_blueprint.route("/company/view_orders", methods=["GET"])
 def company_view_orders():
     current_page = "orders"
-    if "logged_in" not in session or not session["logged_in"]:
-        return redirect("company_login")
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+        return redirect(url_for(".company_login"))
     else:
         company_user_id = session["company_user_id"]
         company_id = session["company_id"]
@@ -438,7 +438,7 @@ def company_view_orders():
 @company_blueprint.route("/company/order/<int:order_id>", methods=["GET"])
 def company_order(order_id):
     current_page = "orders"
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
         return redirect(url_for(".company_login"))
 
     else:
@@ -456,8 +456,8 @@ def company_order(order_id):
 @company_blueprint.route("/company/update_order_status", methods=["GET", "POST"])
 def company_update_order_status():
     current_page = "orders"
-    if "logged_in" not in session or not session["logged_in"]:
-        return redirect(url_for("/company/login"))
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+        return redirect(url_for(".company_login"))
 
     else:
         if request.method == "POST":

@@ -45,7 +45,7 @@ mysql = MySQL(app)
 def user_address():
     if request.method == "POST":
         data = request.form
-        if "logged_in" not in session or not session["logged_in"]:
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
           return redirect("login")
         else:
            user_id=session["user_id"]
@@ -88,7 +88,7 @@ def user_address():
 @user_blueprint.route("/add_address", methods=["POST","GET"])
 def add_address():
   if request.method == "POST":
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
     
@@ -126,7 +126,7 @@ def add_address():
   
 @user_blueprint.route("/view_address", methods=["GET"])
 def view_address():
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]
@@ -144,7 +144,7 @@ def view_address():
 @user_blueprint.route("/edit_address/<int:address_id>", methods=["GET","POST"])
 def edit_address(address_id):
   print(address_id)
-  if "logged_in" not in session or not session["logged_in"]:
+  if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
   else:
       user_id=session['user_id']
@@ -159,7 +159,7 @@ def edit_address(address_id):
 @user_blueprint.route('/save_address/<int:address_id>', methods=['POST'])
 def save_address(address_id):
       if request.method == "POST":
-        if "logged_in" not in session or not session["logged_in"]:
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
            return redirect("login")
         else:
           data = request.form
@@ -184,7 +184,7 @@ def save_address(address_id):
   
 @user_blueprint.route("/delete_address/<int:address_id>", methods=["GET","POST"])
 def delete_address(address_id):
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]

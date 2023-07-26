@@ -157,30 +157,30 @@
       </ul>
     </div>
 
-    {% if session.logged_in and ('usertype' in session and session.usertype =='company_user') %}
+    {% if session.logged_in and ('usertype' in session and session.usertype =='admin_user') %}
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"><b>Company name</b></a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"><b>Admin name</b></a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="/company/logout">Sign out</a>
+      <a class="nav-link px-3" href="/admin/logout">Sign out</a>
     </div> 
   </div>
   {% else %}
  
   <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Company name</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Admin name</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="/company/company_login">Sign In</a>
+      <a class="nav-link px-3" href="/admin/login">Sign In</a>
     </div> 
   </div>
   {% endif %}
@@ -196,25 +196,41 @@
               <a class="nav-link {% if current_page =='dashboard' %} active {% endif %}" aria-current="page" href=""><span data-feather="file" class="align-text-bottom"></span>Dashboard</a>
               </ul>
           </li>
-          <li class="nav-item {% if current_page =='home' %} active {% endif %}">
+          <li class="nav-item {% if current_page =='admin home' %} active {% endif %}">
             <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-              <a class="nav-link {% if current_page =='home' %} active {% endif %}" aria-current="page" href="/company/home"><span data-feather="file" class="align-text-bottom"></span>Home</a>
+              <a class="nav-link {% if current_page =='admin home' %} active {% endif %}" aria-current="page" href="/admin/home"><span data-feather="file" class="align-text-bottom"></span>Home</a>
               </ul>
           </li>
           <li class="nav-item {% if current_page =='orders' %}active{% endif %}">
             <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-              <a class="nav-link {% if current_page =='orders' %}active{% endif %}" aria-current="page" href="/company/view_orders"><span data-feather="file" class="align-text-bottom"></span>Orders</a>
+              <a class="nav-link {% if current_page =='orders' %}active{% endif %}" aria-current="page" href="/admin/orders"><span data-feather="file" class="align-text-bottom"></span>Orders</a>
               </ul>
           </li>
-          <li class="nav-item  {% if current_page=='products' %}active {% endif %}">
+          <li class="nav-item  {% if current_page =='admin products' %}active {% endif %}">
             <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-              <a class="nav-link {% if current_page =='products' %}active{% endif %}" aria-current="page" href="/company/products"><span data-feather="file" class="align-text-bottom"></span>Products</a>
+              <a class="nav-link {% if current_page =='admin products' %}active{% endif %}" aria-current="page" href="/admin/products"><span data-feather="file" class="align-text-bottom"></span>Products</a>
               </ul>
            
           </li>
-          <li class="nav-item {% if current_page =='customers' %} active {% endif %}">
+          <li class="nav-item {% if current_page =='users' %} active {% endif %}">
             <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-              <a class="nav-link {% if current_page =='customers' %} active {% endif %}" aria-current="page" href="/company/home"><span data-feather="file" class="align-text-bottom"></span>Customers</a>
+              <a class="nav-link {% if current_page =='users' %} active {% endif %}" aria-current="page" href="/admin/users"><span data-feather="file" class="align-text-bottom"></span>Users</a>
+              </ul>
+          </li>
+          <li class="nav-item {% if current_page =='companies' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='companies' %} active {% endif %}" aria-current="page" href="/admin/companies"><span data-feather="file" class="align-text-bottom"></span>Companies</a>
+              </ul>
+          </li>
+          <li class="nav-item {% if current_page =='categories' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='categories' %} active {% endif %}" aria-current="page" href="/admin/categories"><span data-feather="file" class="align-text-bottom"></span>Categories</a>
+              </ul>
+          </li>
+
+          <li class="nav-item {% if current_page =='sub categories' %} active {% endif %}">
+            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+              <a class="nav-link {% if current_page =='sub categories' %} active {% endif %}" aria-current="page" href="/admin/sub_categories"><span data-feather="file" class="align-text-bottom"></span> Sub Categories</a>
               </ul>
           </li>
           

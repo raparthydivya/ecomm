@@ -401,6 +401,9 @@ app.run(host="localhost", port=5000, debug=True)
 # CREATE TABLE sub_category(
 #     sub_category_id int NOT NULL AUTO_INCREMENT,category_id int NOT NULL,created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(sub_category_id))
 
+# CREATE TABLE admin(
+#     id int NOT NULL AUTO_INCREMENT,admin_name varchar(255),password varchar(255),created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,status int,PRIMARY KEY(id))
+
 
 
 

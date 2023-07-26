@@ -76,7 +76,7 @@ mysql = MySQL(app)
     
 @wishlist_blueprint.route("/addproduct_wishlist/<int:product_id>", methods=["GET"])
 def addproduct_wishlist(product_id):
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         print(session)
         return redirect(url_for("login_blueprint.login"))
     else:
@@ -110,7 +110,7 @@ def addproduct_wishlist(product_id):
     
 @wishlist_blueprint.route("/view_wishlist", methods=["GET"])
 def view_wishlist():
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]
@@ -133,7 +133,7 @@ def view_wishlist():
     
 @wishlist_blueprint.route("/delete_wishlist", methods=["POST"])
 def delete_wishlist():
-    if "logged_in" not in session or not session["logged_in"]:
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
         return redirect("login")
     else:
         user_id = session["user_id"]

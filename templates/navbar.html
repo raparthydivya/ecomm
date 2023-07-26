@@ -28,7 +28,7 @@
   </head>
   <body>
     <header>
-      {% if session.logged_in %}
+      {% if session.logged_in and ('usertype' in session and session.usertype =='user')%}
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">  
           <div class="collapse navbar-collapse" id="navbarText">   
