@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, Flask, session, redirect, url_for
-from datetime import datetime
+from datetime import datetime,timedelta
 import pandas as pd
 from openpyxl import load_workbook
 from flask_mysqldb import MySQL
@@ -11,11 +11,99 @@ app = Flask(__name__)
 mysql = MySQL(app)
 
 
+
+
+
+def get_data_ranges():
+    today=datetime.today()
+    last_month_start=datetime(today.year,today.month-1,1)
+    last_month_end=datetime(today.year,today.month,1)-timedelta(days=1)
+    this_month_start=datetime(today.year,today.month,1)
+    this_month_end=datetime(today.year,today.month+1,1)-timedelta(days=1)
+    return last_month_start,last_month_end,this_month_start,this_month_end
+
+
+
+def login():
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='admin_user':
+     return redirect(url_for(".admin_login"))
+
 @admin_blueprint.route("/admin/home", methods=["GET", "POST"])
 def admin_home():
     current_page = "admin home"
+    if (
+        "logged_in" not in session
+        or not session["logged_in"]
+        or "usertype" not in session
+        or session["usertype"] != "admin_user"
+    ):
+        return redirect(url_for(".admin_login"))
+    else:
+   
+        message = request.args.get("message", "")
+        alert_class = request.args.get("alert_class")
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT status,COUNT(*) AS order_count FROM orders GROUP BY status")
+        order_data = cursor.fetchall()
+        # print(order_data)
+        cursor.close()
+        chart_data=[]
+       
+        for data in order_data:
+            
+            chart_data.append({"name":data['status'],'y':data['order_count']})
+            # print(chart_data)
+            
+        
+        last_month_start,last_month_end,this_month_start,this_month_end=get_data_ranges()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        last_month_query="SELECT COUNT(*) AS order_count,DATE(created_date) AS created_date FROM orders WHERE created_date BETWEEN %s AND %s GROUP BY DATE(created_date)"     
+        cursor.execute(last_month_query,(last_month_start,last_month_end))
+        last_month_data=cursor.fetchall()
+        print(last_month_data)
+        
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        this_month_query="SELECT COUNT(*) AS order_count,DATE(created_date) AS created_date FROM orders WHERE created_date BETWEEN %s AND %s GROUP BY DATE(created_date)"
+        cursor.execute(this_month_query,(this_month_start,this_month_end))
+        this_month_data=cursor.fetchall()
+        
+        cursor.close()
+        
+        last_month_orders=[
+            { 'created_date':str(row['created_date']),'order_count':row['order_count']}
+            for row in last_month_data
+        ]
+        # print(last_month_orders)
+        
+        this_month_orders=[
+            { 'created_date':str(row['created_date']),'order_count':row['order_count']}
+            for row in this_month_data
+        ]
+        # print(this_month_data)
+        last_month_order_counts=[order['order_count']for order in last_month_orders]
+        this_month_order_counts=[order['order_count']for order in this_month_orders]
+        last_month_order_dates=[order['created_date']for order in last_month_orders]
+        this_month_order_dates=[order['created_date']for order in last_month_orders]
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT p.name,COUNT(o.order_id) AS order_count FROM orders o JOIN product p ON o.product_id=p.product_id GROUP BY p.product_id,p.name")
+        products_order_data = cursor.fetchall()
+        cursor.close()
+        product_orders=[
+            { 'name':row['name'],'order_count':row['order_count']}
+            for row in products_order_data
+        ]
+        # print(product_orders)
+        
+        return render_template('admin_home.html',chart_data=chart_data,last_month_orders=last_month_orders,this_month_orders=this_month_orders,product_orders=product_orders,last_month_order_counts=last_month_order_counts,this_month_order_counts=this_month_order_counts,last_month_order_dates=last_month_order_dates,this_month_order_dates=this_month_order_dates)
+    
+    
 
-    return render_template("admin_home.html")
+    # return render_template("admin_home.html")
+
+
+
+
+
 
 
 @admin_blueprint.route("/admin/login", methods=["GET", "POST"])
@@ -436,7 +524,7 @@ def admin_add_sub_categories():
                 alert_class = "success"
                 return redirect(
                     url_for(
-                        ".admin_sub_categories", message=message, alert_class=alert_class,categories=categories
+                        ".admin_sub_categories", message=message, alert_class=alert_class,
                     )
                 )
     return render_template(
@@ -445,3 +533,6 @@ def admin_add_sub_categories():
             alert_class=alert_class,
             current_page=current_page,
         )
+
+
+

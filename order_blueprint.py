@@ -74,12 +74,48 @@ def view_order():
            )
           orders = cursor.fetchall()
           cursor.close()
-        return render_template('view_order.html',orders=orders,message=message,alert_class=alert_class)
+        return render_template('view_orders.html',orders=orders,message=message,alert_class=alert_class)
+
+@order_blueprint.route("/view_order_details/<int:order_id>", methods=["POST","GET"])
+def view_order_details(order_id):
+    # if request.method == "POST":
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
+           return redirect("login")
+        
+        else:
+          user_id = session["user_id"]
+          message = request.args.get("message",'')
+          alert_class=request.args.get('alert_class')
+          cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+          cursor.execute(
+            f"SELECT o.*,a.*,p.image,p.name FROM orders AS o JOIN address AS a ON o.address_id=a.address_id JOIN product as p ON o.product_id=p.product_id WHERE order_id={order_id}"
+           )
+          order = cursor.fetchone()
+          cursor.close()
+        
+         
+        return render_template('view_order_details.html',order=order,message=message,alert_class=alert_class,order_id=order_id)
 
 
 
+@order_blueprint.route("/order_returned/<int:order_id>", methods=["POST","GET"])
+def order_returned(order_id):
+    # if request.method == "POST":
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
+           return redirect("login")
+        
+        else:
+          user_id = session["user_id"]
+          message = request.args.get("message",'')
+          alert_class=request.args.get('alert_class')
+          cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+          cursor.execute(f"UPDATE orders SET status ='Order Returned' WHERE order_id={order_id}")
+          mysql.connection.commit()
+          cursor.close()
+          message='Order Status updated to returned'
+          alert_class='success'
 
-
+          return redirect(url_for("order_blueprint.view_order_details",message=message,alert_class=alert_class,order_id=order_id))
 
     
 

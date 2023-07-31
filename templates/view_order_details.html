@@ -1,0 +1,68 @@
+{% include 'navbar.html' %}
+<body>
+  <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  
+
+<section class="py-5">
+    <div class="container">
+      <div class="row gx-5">
+        <aside class="col-lg-6">
+          <div class="border rounded-4 mb-3 d-flex justify-content-center">
+            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
+               
+              <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="{{order.image}}" />
+            </a>
+    
+    
+        
+          </div>
+        </aside>
+        <main class="col-lg-6">
+          <div class="ps-lg-3">
+            <h4 class="title text-dark">
+                <p>Name:{{order.name}}</p>
+                <p>Address:
+                    {{order.street_name}},
+                  {{order.city}},
+                  {{order.state}},
+                  {{order.country}},
+                  {{order.postal_code}}</p>
+              <p> Amount : ₹{{order.amount}}</p>
+                <p>Status:{% if order.status == 'Order Accepted'%}
+                  <span class="badge bg-success fs-6">Order Accepted</span>
+                  {% elif order.status == 'Order Shipped'%}
+                  <span class="badge bg-primary fs-6">Order Shipped</span>
+                  {% elif order.status == 'Order Delivered'%}
+                  <span class="badge bg-info fs-6">Order Delivered</span>
+                  {% elif order.status == 'Order Rejected'%}
+                  <span class="badge bg-danger fs-6">Order Rejected</span>
+                  {% elif order.status == 'Order Returned'%}
+                  <span class="badge bg-primary fs-6">Order Returned</span>
+                  {% else %}
+                  <span class="badge bg-primary fs-6">Order Placed</span>
+      
+                  {% endif %}</p>
+                <p>Order Placed Date{{order.created_date}}</p>
+                <p> {% if order.status=='Order Delivered'%}
+                  {% if order.status!='Order Returned' %}
+                <form action="{{url_for('.order_returned',order_id=order.order_id)}}" method='POST'>
+                <button type="submit" class="btn btn-info">Return Order</button>
+                </form>
+                {% endif %}
+                {%endif%}
+              </p>
+              </h4>
+            </div>
+    
+          </div>
+       
+          
+       </main>
+      
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+</main>
+</body>
+</html>

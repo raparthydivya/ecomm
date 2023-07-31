@@ -8,6 +8,10 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
         crossorigin="anonymous"
       />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body><header>
         {% if session.logged_in %}
@@ -79,6 +83,7 @@
           <th scope="col">AMOUNT</th>
           <th scope="col">STATUS</th>
           <th scope="col">ORDER PLACED DATE</th>
+          <th scope="col">VIEW</th>
         </tr>
       </thead>
       <tbody>
@@ -106,6 +111,9 @@
 
             {% endif %}</td>
           <td>{{order.created_date}}</td>
+          <td><center>
+            <a href="{{url_for('.view_order_details',order_id=order.order_id)}}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+            </center></td>
         </tr>
         {% endfor %}
         </tbody>
