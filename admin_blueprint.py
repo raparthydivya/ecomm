@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, Flask, session, redirect, url_for
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta,time
 import pandas as pd
 from openpyxl import load_workbook
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+from dateutil.relativedelta import relativedelta
 
 
 admin_blueprint = Blueprint("admin_blueprint", __name__)
@@ -11,25 +12,27 @@ app = Flask(__name__)
 mysql = MySQL(app)
 
 
+def login123():
+    print(session)
+    if session:
+        redirect(url_for(".admin_login"))
+        print(18)
+        
+    if (
+        "logged_in" not in session
+        or not session["logged_in"]
+        or "usertype" not in session
+        or session["usertype"] != "admin_user"
+    ):
+        print(27)
+        return redirect(url_for(".admin_login"))
+    return True  
 
-
-
-def get_data_ranges():
-    today=datetime.today()
-    last_month_start=datetime(today.year,today.month-1,1)
-    last_month_end=datetime(today.year,today.month,1)-timedelta(days=1)
-    this_month_start=datetime(today.year,today.month,1)
-    this_month_end=datetime(today.year,today.month+1,1)-timedelta(days=1)
-    return last_month_start,last_month_end,this_month_start,this_month_end
-
-
-
-def login():
-    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='admin_user':
-     return redirect(url_for(".admin_login"))
 
 @admin_blueprint.route("/admin/home", methods=["GET", "POST"])
 def admin_home():
+    
+   
     current_page = "admin home"
     if (
         "logged_in" not in session
@@ -45,65 +48,69 @@ def admin_home():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT status,COUNT(*) AS order_count FROM orders GROUP BY status")
         order_data = cursor.fetchall()
-        # print(order_data)
+            # print(order_data)
         cursor.close()
         chart_data=[]
        
         for data in order_data:
-            
+                
             chart_data.append({"name":data['status'],'y':data['order_count']})
-            # print(chart_data)
+                # print(chart_data)
+                
+                
+        
+        today=datetime.today()
+        final_output=[]
+            # total_months=1
+        n=3
+        for i in range(n):
+                start_date=today-relativedelta(months=i)
+                start_date=start_date.replace(day=1)
+                end_date=start_date+ relativedelta(months=1) - timedelta(days=1)
             
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                query=f"SELECT COUNT(*) AS order_count,DATE(created_date) AS created_date FROM orders WHERE created_date BETWEEN '{start_date}' AND '{end_date}' GROUP BY DATE(created_date)"     
+                cursor.execute(query)
+                order_data=cursor.fetchall()
+                # print(query)
+                
+                month_data = []
+            
+                current_date=start_date
+            
+                while current_date <= end_date:
+                    order_count=0
+                    for data in order_data:
+                        # print(data['created_date'],current_date)
+                        
+                        if current_date.strftime('%Y-%m-%d')==data['created_date'].strftime('%Y-%m-%d'):
+                            order_count=data['order_count']
+                            break
+                    month_data.append(order_count)
+                    current_date +=timedelta(days=1)
+                    
+                # print(month_data)
+                final_output.append({'name':start_date.strftime('%B'),'data':month_data})
+                
+        # print(final_output)     
+                        
         
-        last_month_start,last_month_end,this_month_start,this_month_end=get_data_ranges()
+            
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        last_month_query="SELECT COUNT(*) AS order_count,DATE(created_date) AS created_date FROM orders WHERE created_date BETWEEN %s AND %s GROUP BY DATE(created_date)"     
-        cursor.execute(last_month_query,(last_month_start,last_month_end))
-        last_month_data=cursor.fetchall()
-        print(last_month_data)
-        
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        this_month_query="SELECT COUNT(*) AS order_count,DATE(created_date) AS created_date FROM orders WHERE created_date BETWEEN %s AND %s GROUP BY DATE(created_date)"
-        cursor.execute(this_month_query,(this_month_start,this_month_end))
-        this_month_data=cursor.fetchall()
-        
-        cursor.close()
-        
-        last_month_orders=[
-            { 'created_date':str(row['created_date']),'order_count':row['order_count']}
-            for row in last_month_data
-        ]
-        # print(last_month_orders)
-        
-        this_month_orders=[
-            { 'created_date':str(row['created_date']),'order_count':row['order_count']}
-            for row in this_month_data
-        ]
-        # print(this_month_data)
-        last_month_order_counts=[order['order_count']for order in last_month_orders]
-        this_month_order_counts=[order['order_count']for order in this_month_orders]
-        last_month_order_dates=[order['created_date']for order in last_month_orders]
-        this_month_order_dates=[order['created_date']for order in last_month_orders]
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute("SELECT p.name,COUNT(o.order_id) AS order_count FROM orders o JOIN product p ON o.product_id=p.product_id GROUP BY p.product_id,p.name")
+        cursor.execute("SELECT p.name,COUNT(o.order_id) AS order_count FROM orders o JOIN product p ON o.product_id=p.product_id GROUP BY p.product_id,p.name limit 15 ")
         products_order_data = cursor.fetchall()
         cursor.close()
-        product_orders=[
-            { 'name':row['name'],'order_count':row['order_count']}
-            for row in products_order_data
-        ]
-        # print(product_orders)
+        product_data=[]
         
-        return render_template('admin_home.html',chart_data=chart_data,last_month_orders=last_month_orders,this_month_orders=this_month_orders,product_orders=product_orders,last_month_order_counts=last_month_order_counts,this_month_order_counts=this_month_order_counts,last_month_order_dates=last_month_order_dates,this_month_order_dates=this_month_order_dates)
+        for data in products_order_data:
+                
+            product_data.append({"name":data['name'],"y":data['order_count']})
+            
+            # print(product_orders)
+        
+    return render_template('admin_home.html',chart_data=chart_data,product_data=product_data,final_output=final_output,current_page=current_page)
     
     
-
-    # return render_template("admin_home.html")
-
-
-
-
-
 
 
 @admin_blueprint.route("/admin/login", methods=["GET", "POST"])
@@ -157,8 +164,8 @@ def admin_products():
         alert_class = request.args.get("alert_class")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            "SELECT p.*,c.*,ct.*,st.* FROM product AS p JOIN company as c ON p.company_id=c.company_id JOIN category as ct ON p.category_id=ct.category_id JOIN sub_category as st ON p.sub_category_id=st.sub_category_id"
-        )
+                "SELECT p.*,c.*,ct.*,st.* FROM product AS p JOIN company as c ON p.company_id=c.company_id JOIN category as ct ON p.category_id=ct.category_id JOIN sub_category as st ON p.sub_category_id=st.sub_category_id"
+            )
         products = cursor.fetchall()
         cursor.close()
     return render_template(
@@ -193,7 +200,6 @@ def admin_view_product(product_id):
 
 @admin_blueprint.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
-    current_page = "users"
     if (
         "logged_in" not in session
         or not session["logged_in"]
@@ -202,6 +208,8 @@ def admin_users():
     ):
         return redirect(url_for(".admin_login"))
     else:
+        current_page = "users"
+        
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
 
@@ -209,7 +217,7 @@ def admin_users():
         cursor.execute("SELECT * FROM user")
         users = cursor.fetchall()
 
-        return render_template(
+    return render_template(
             "admin_users.html",
             users=users,
             message=message,
@@ -241,32 +249,26 @@ def admin_view_address(user_id):
 @admin_blueprint.route("/admin/user_address/<int:user_id>", methods=["GET", "POST"])
 def admin_user_address(user_id):
     current_page = "users"
-    if (
-        "logged_in" not in session
-        or not session["logged_in"]
-        or "usertype" not in session
-        or session["usertype"] != "admin_user"
-    ):
-        return redirect(url_for(".admin_login"))
-    else:
-        message = request.args.get("message", "")
-        alert_class = request.args.get("alert_class")
+   
+    message = request.args.get("message", "")
+    alert_class = request.args.get("alert_class")
 
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(f"SELECT * FROM user WHERE user_id={user_id}")
-        user_data = cursor.fetchone()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f"SELECT * FROM user WHERE user_id={user_id}")
+    user_data = cursor.fetchone()
 
-        cursor.execute(f"SELECT * FROM address WHERE user_id={user_id}")
-        user_address = cursor.fetchone()
-        cursor.close()
+    cursor.execute(f"SELECT * FROM address WHERE user_id={user_id}")
+    user_address = cursor.fetchone()
+    cursor.close()
 
-        return render_template(
+    return render_template(
             "admin_user_address.html",
             user_address=user_address,
             message=message,
             user_id=user_id,
             alert_class=alert_class,
             current_page=current_page,
+           
         )
 
 
@@ -400,12 +402,16 @@ def admin_sub_categories():
 
         sub_categories = cursor.fetchall()
         cursor.close()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM category")
+        categories=cursor.fetchall()
+        # print(category)
         return render_template(
             "admin_sub_categories.html",
             sub_categories=sub_categories,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,categories=categories
         )
 
 
@@ -471,18 +477,10 @@ def admin_add_sub_categories():
     else:
         if request.method == "POST":
             data = request.form
-            category_name=data['category_name']
-            # category_id=data['category_id']
+            # category_name=data['category_name']
+            category_id=data['category_id']
             sub_category_name = data["sub_category_name"]
             
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            
-            cursor.execute(
-                "SELECT category_id FROM category WHERE category_name=%s", (category_name,)
-            )
-            existing_category = cursor.fetchone()
-            print(existing_category)
-            cursor.close()
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(
@@ -502,16 +500,9 @@ def admin_add_sub_categories():
                     )
               
                 )
-            if not existing_category:
-                message="Category name does not exists"
-                alert_class="warning"
-                return redirect(
-                    url_for(
-                        ".admin_sub_categories",message=message,alert_class=alert_class
-                    ))
 
             else:
-                category_id=existing_category['category_id']
+                category_id=data['category_id']
                 # existing_category['category_id']
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 cursor.execute(
