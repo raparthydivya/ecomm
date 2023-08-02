@@ -19,7 +19,7 @@ def home():
    current_page='home'
    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
    cursor.execute(
-                    "SELECT * FROM product limit 12"
+                    "SELECT * FROM product limit 13"
                   
                 )
    products = cursor.fetchall()

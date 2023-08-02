@@ -160,7 +160,7 @@
     {% if session.logged_in and ('usertype' in session and session.usertype =='company_user') %}
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"><b>Company name</b></a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#"><img width="50" src="{{company.logo_url}}" alt="company.logo_url" /> <b>Company Name: {{company.company_name}}</b></a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -191,11 +191,6 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-body-tertiary sidebar collapse">
       <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
-          <li class="nav-item {% if current_page =='dashboard' %} active {% endif %}">
-            <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-              <a class="nav-link {% if current_page =='dashboard' %} active {% endif %}" aria-current="page" href=""><span data-feather="file" class="align-text-bottom"></span>Dashboard</a>
-              </ul>
-          </li>
           <li class="nav-item {% if current_page =='home' %} active {% endif %}">
             <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
               <a class="nav-link {% if current_page =='home' %} active {% endif %}" aria-current="page" href="/company/home"><span data-feather="file" class="align-text-bottom"></span>Home</a>

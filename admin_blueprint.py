@@ -61,7 +61,6 @@ def admin_home():
         
         today=datetime.today()
         final_output=[]
-            # total_months=1
         n=3
         for i in range(n):
                 start_date=today-relativedelta(months=i)
@@ -81,7 +80,6 @@ def admin_home():
                 while current_date <= end_date:
                     order_count=0
                     for data in order_data:
-                        # print(data['created_date'],current_date)
                         
                         if current_date.strftime('%Y-%m-%d')==data['created_date'].strftime('%Y-%m-%d'):
                             order_count=data['order_count']
