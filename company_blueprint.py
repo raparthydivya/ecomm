@@ -29,9 +29,8 @@ def validate_login():
 @company_blueprint.route("/company/home", methods=["GET", "POST"])
 def company_home():
     current_page = "home"
-
-    if "logged_in" not in session or not session["logged_in" or session['usertype']!='company_user']:
-        return redirect("/company/login")
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+        return redirect(url_for(".company_login"))
     else:
         company_user_id = session["company_user_id"]
         company_id=session['company_id']

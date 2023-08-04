@@ -1,12 +1,14 @@
 {% include 'admin_sidebar.html' %}
-<title>admin/view_product</title>
+<title>admin/company/view_product</title>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <body>
         <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href='/admin/products'>Products</a></li>
-            <li class="breadcrumb-item active" aria-current="/admin/view_product"><a href='/admin/products'>{{product.name}}</a></li>
+            <li class="breadcrumb-item"><a href='/admin/companies'>Companies</a></li>
+            <li class="breadcrumb-item active" aria-current=""><a href='/admin/products'>{{product.company_name}}</a></li>
+            <li class="breadcrumb-item"><a href={{url_for('.admin_company_products',company_id=product.company_id)}}>Products</a></li>
+            <li class="breadcrumb-item"><a href=''>{{product.name}}</a></li>
           </ol>
         </nav>
 

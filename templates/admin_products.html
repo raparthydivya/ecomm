@@ -1,10 +1,10 @@
 {% include 'admin_sidebar.html' %}
 <html lang="en">
 <head>
-   
+    
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>User Details</title>
+<title>admin/products</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -24,12 +24,19 @@ $(document).ready(function(){
 });
 </script>
 </head>
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>    
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 <body>
+    
     <script>
         $(document).ready(function() {
             // Setup - add a text input to each footer cell
             $('#myTable tfoot th').each( function (i) {
+               
                 var title = $('#myTable thead th').eq( $(this).index() ).text();
                 $(this).html( '<input type="text" placeholder="'+title+'" data-index="'+i+'" />' );
             } );
@@ -53,6 +60,15 @@ $(document).ready(function(){
         } );
     </script>
     <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
+
+   
+    
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active"><a href='/admin/products'>Products</a></li>
+         
+        </ol>
+    </nav>
 
 <div class="container-xl">
     <div class="table-responsive">

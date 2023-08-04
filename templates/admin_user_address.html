@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>User Details</title>
+<title>admin/user_details</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -31,14 +31,24 @@ $(document).ready(function(){
             $('#myTable').DataTable();
         } );
     </script>
+  
     <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            
+          <li class="breadcrumb-item"><a href='/admin/users'>Users</a></li>
+          <li class="breadcrumb-item active" aria-current=""><a href=''>{{user_data.username}}</a></li>
+          <li class="breadcrumb-item"><a href=''>Address</a></li>
+        </ol>
+      </nav>
+     
 
-<div class="container-xl">
+ <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2><b>Users</b></h2></div>
+                    <div class="col-sm-8"><h2><b>User Details</b></h2></div>
                     <div class="col-sm-4">
                         <a href="">
                         <div class="product">
@@ -53,13 +63,13 @@ $(document).ready(function(){
             <table id="myTable" class="table table-striped table-primary table-hover table-bordered">
                 <thead>
                     <tr><center>
-                        <th>user_id</th>
-                        <th> username </th>
-                        <th>mobile</th>
+                        <th>User Id</th>
+                        <th> Username </th>
+                        <th>Mobile</th>
                         
                         <th>Address</th>
-                        <th>created_date</th>
-                        <th>updated_date</th>
+                        <th>Created Date</th>
+                        <th>Updated Date</th>
                         
                       
                     </center>

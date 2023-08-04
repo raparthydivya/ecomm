@@ -1,6 +1,7 @@
 {% include 'admin_sidebar.html' %}
 <html lang="en">
 <head>
+    <title>admin/companies</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>User Details</title>
@@ -30,7 +31,12 @@ $(document).ready(function(){
         } );
     </script>
     <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
-
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active"><a href='/admin/company'>Companies</a></li>
+         
+        </ol>
+    </nav>
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">

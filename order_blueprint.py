@@ -10,6 +10,8 @@ app = Flask(__name__)
 mysql = MySQL(app)
 
 
+selected_products={}
+
 @order_blueprint.route("/place_order/<int:product_id>", methods=["POST","GET"])
 def place_order(product_id):   
         if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='user':
@@ -28,7 +30,7 @@ def place_order(product_id):
                 
                 
                 if not addresses:
-                    return redirect(url_for("user_blueprint.add_address"))
+                  return redirect(url_for("user_blueprint.add_address"))
                     
                         
         return render_template('order.html',addresses=addresses,product_id=product_id,products=products)
@@ -46,7 +48,9 @@ def submit_order(product_id):
           product= cursor.fetchone()
           user_id = session["user_id"]
           address_id=request.form.get('address_id')
-          status='order placed'
+          quantity=request.form.get('quantity')
+        
+          status='Order Placed'
           cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
           cursor.execute(
                     "INSERT INTO orders (user_id,product_id,amount,address_id,status) VALUES (%s,%s,%s,%s,%s)",(user_id,product_id,product['amount'],address_id,status)

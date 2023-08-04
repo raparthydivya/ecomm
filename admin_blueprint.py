@@ -28,6 +28,25 @@ def login123():
         return redirect(url_for(".admin_login"))
     return True  
 
+@admin_blueprint.route("/admin/sidebar", methods=["GET", "POST"])
+def admin_sidebar():
+    if (
+        "logged_in" not in session
+        or not session["logged_in"]
+        or "usertype" not in session
+        or session["usertype"] != "admin_user"
+    ):
+        return redirect(url_for(".admin_login"))
+    else:
+        message = request.args.get("message", "")
+        alert_class = request.args.get("alert_class")
+        
+        
+    return render_template('admin_sidebar.html',admin=admin)
+
+
+
+
 
 @admin_blueprint.route("/admin/home", methods=["GET", "POST"])
 def admin_home():
@@ -45,6 +64,11 @@ def admin_home():
    
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
+        id=session['id']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM admin WHERE id={id}")
+        admin = cursor.fetchone()
+        # print(admin)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT status,COUNT(*) AS order_count FROM orders GROUP BY status")
         order_data = cursor.fetchall()
@@ -106,7 +130,7 @@ def admin_home():
             
             # print(product_orders)
         
-    return render_template('admin_home.html',chart_data=chart_data,product_data=product_data,final_output=final_output,current_page=current_page)
+    return render_template('admin_home.html',chart_data=chart_data,product_data=product_data,final_output=final_output,current_page=current_page,admin=admin)
     
     
 
@@ -158,6 +182,10 @@ def admin_products():
     ):
         return redirect(url_for(".admin_login"))
     else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -171,7 +199,7 @@ def admin_products():
         products=products,
         message=message,
         alert_class=alert_class,
-        current_page=current_page,
+        current_page=current_page,admin=admin
     )
 
 
@@ -180,6 +208,9 @@ def admin_view_product(product_id):
     current_page = "admin products"
     message = request.args.get("message", "")
     alert_class = request.args.get("alert_class")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM admin")
+    admin = cursor.fetchone()
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         f"SELECT p.*,c.*,ct.*,st.* FROM product AS p JOIN company as c ON p.company_id=c.company_id JOIN category as ct ON p.category_id=ct.category_id JOIN sub_category as st ON p.sub_category_id=st.sub_category_id WHERE product_id={product_id}"
@@ -192,12 +223,13 @@ def admin_view_product(product_id):
         product_id=product_id,
         message=message,
         alert_class=alert_class,
-        current_page=current_page,
+        current_page=current_page,admin=admin
     )
 
 
 @admin_blueprint.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
+    current_page = "users"
     if (
         "logged_in" not in session
         or not session["logged_in"]
@@ -206,8 +238,11 @@ def admin_users():
     ):
         return redirect(url_for(".admin_login"))
     else:
-        current_page = "users"
         
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
 
@@ -220,27 +255,38 @@ def admin_users():
             users=users,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
         )
 
 
 @admin_blueprint.route("/admin/view_address/<int:user_id>", methods=["GET"])
 def admin_view_address(user_id):
-    current_page = "admin products"
+    current_page = "users"
     message = request.args.get("message", "")
     alert_class = request.args.get("alert_class")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM admin")
+    admin = cursor.fetchone()
+    cursor.close()
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         f"SELECT u.*,a.* FROM user AS u JOIN address as a ON u.user_id=a.user_id WHERE u.user_id={user_id}"
     )
     user_address = cursor.fetchall()
+    cursor.close()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+   
+    cursor.execute(f"SELECT * FROM user WHERE user_id={user_id}")
+    user_data = cursor.fetchone()
+    cursor.close()
+    
     return render_template(
         "admin_user_address.html",
         user_address=user_address,
         message=message,
         user_id=user_id,
         alert_class=alert_class,
-        current_page=current_page,
+        current_page=current_page,admin=admin,user_data=user_data
     )
 
 
@@ -250,7 +296,10 @@ def admin_user_address(user_id):
    
     message = request.args.get("message", "")
     alert_class = request.args.get("alert_class")
-
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM admin")
+    admin = cursor.fetchone()
+    cursor.close()
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(f"SELECT * FROM user WHERE user_id={user_id}")
     user_data = cursor.fetchone()
@@ -263,9 +312,9 @@ def admin_user_address(user_id):
             "admin_user_address.html",
             user_address=user_address,
             message=message,
-            user_id=user_id,
+            user_id=user_id,user_data=user_data,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
            
         )
 
@@ -284,8 +333,10 @@ def admin_companies():
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
         # session["admin_name"] = account["admin_name"]
-        # admin_id = session["admin_id"]
-
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT * FROM company")
         companies = cursor.fetchall()
@@ -295,7 +346,7 @@ def admin_companies():
             companies=companies,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
         )
 
 
@@ -312,8 +363,16 @@ def admin_company_products(company_id):
     ):
         return redirect(url_for(".admin_login"))
     else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM company WHERE company_id={company_id}")
+        company = cursor.fetchone()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(f"SELECT * FROM product WHERE company_id={company_id}")
         products = cursor.fetchall()
@@ -324,8 +383,31 @@ def admin_company_products(company_id):
             company_id=company_id,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin,company=company
         )
+
+@admin_blueprint.route("/admin/company/view_product/<int:product_id>", methods=["GET"])
+def admin_company_view_product(product_id):
+    current_page = "companies"
+    message = request.args.get("message", "")
+    alert_class = request.args.get("alert_class")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM admin")
+    admin = cursor.fetchone()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        f"SELECT p.*,c.*,ct.*,st.* FROM product AS p JOIN company as c ON p.company_id=c.company_id JOIN category as ct ON p.category_id=ct.category_id JOIN sub_category as st ON p.sub_category_id=st.sub_category_id WHERE product_id={product_id}"
+    )
+    product = cursor.fetchone()
+    cursor.close()
+    return render_template(
+        "admin_company_view_product.html",
+        product=product,
+        product_id=product_id,
+        message=message,
+        alert_class=alert_class,
+        current_page=current_page,admin=admin
+    )
 
 
 @admin_blueprint.route("/admin/orders", methods=["GET", "POST"])
@@ -339,6 +421,10 @@ def admin_orders():
     ):
         return redirect(url_for(".admin_login"))
     else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -352,7 +438,7 @@ def admin_orders():
             orders=orders,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
         )
 
 
@@ -367,6 +453,10 @@ def admin_categories():
     ):
         return redirect(url_for(".admin_login"))
     else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -378,7 +468,7 @@ def admin_categories():
             categories=categories,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
         )
 
 
@@ -393,6 +483,10 @@ def admin_sub_categories():
     ):
         return redirect(url_for(".admin_login"))
     else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
         message = request.args.get("message", "")
         alert_class = request.args.get("alert_class")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -409,7 +503,7 @@ def admin_sub_categories():
             sub_categories=sub_categories,
             message=message,
             alert_class=alert_class,
-            current_page=current_page,categories=categories
+            current_page=current_page,categories=categories,admin=admin
         )
 
 
@@ -425,6 +519,10 @@ def admin_add_categories():
         return redirect(url_for(".company_login"))
     else:
         if request.method == "POST":
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute("SELECT * FROM admin")
+            admin = cursor.fetchone()
+            cursor.close()
             data = request.form
             category_name = data["category_name"]
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -455,7 +553,7 @@ def admin_add_categories():
                 alert_class = "success"
                 return redirect(
                     url_for(
-                        ".admin_categories", message=message, alert_class=alert_class
+                        ".admin_categories", message=message, alert_class=alert_class,admin=admin
                     )
                 )
 
@@ -474,6 +572,10 @@ def admin_add_sub_categories():
     
     else:
         if request.method == "POST":
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute("SELECT * FROM admin")
+            admin = cursor.fetchone()
+            cursor.close()
             data = request.form
             # category_name=data['category_name']
             category_id=data['category_id']
@@ -520,8 +622,131 @@ def admin_add_sub_categories():
             "admin_sub_categories.html",
             message=message,
             alert_class=alert_class,
-            current_page=current_page,
+            current_page=current_page,admin=admin
         )
 
 
 
+@admin_blueprint.route("/admin/edit_sub_category/<int:sub_category_id>", methods=["GET"])
+def admin_edit_sub_category(sub_category_id):
+    current_page = "products"
+    if (
+        "logged_in" not in session
+        or not session["logged_in"]
+        or "usertype" not in session
+        or session["usertype"] != "admin_user"
+    ):
+        return redirect(url_for(".admin_login"))
+    else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM admin")
+        admin = cursor.fetchone()
+        cursor.close()
+        # admin_id=session['admin_id']
+        message = request.args.get("message", "")
+        aleidrt_class = request.args.get("alert_class")
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT sb.*,c.* FROM sub_category AS sb JOIN category as c ON sb.category_id=c.category_id",)
+        sub_category=cursor.fetchone()
+        cursor.close()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM category")
+        category=cursor.fetchall()
+    return render_template(
+        "edit_sub_category.html",
+        sub_category=sub_category,
+        sub_category_id=sub_category_id,
+        current_page=current_page,category=category,admin=admin
+    )
+
+
+@admin_blueprint.route("/save_sub_category/<int:sub_category_id>", methods=["POST"])
+def save_sub_category(sub_category_id):
+    current_page = "Sub Categories"
+    if request.method=='POST':
+        if (
+            "logged_in" not in session
+            or not session["logged_in"]
+            or "usertype" not in session
+            or session["usertype"] != "admin_user"
+        ):
+            return redirect(url_for(".admin_login"))
+        else:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute("SELECT * FROM admin")
+            admin = cursor.fetchone()
+            cursor.close()
+            message = request.args.get("message", "")
+            alert_class = request.args.get("alert_class")
+            data=request.form
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(f"SELECT * FROM sub_category WHERE sub_category_id={sub_category_id}")
+            sub_category=cursor.fetchone()
+            cursor.close()
+            sub_category_name = data["sub_category_name"]
+            category_id=data['category_id']
+            print(category_id)
+            
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(
+                    f"UPDATE sub_category SET sub_category_name=%s,category_id=%s WHERE sub_category_id={sub_category_id}",
+                    (sub_category_name,category_id),
+                )
+            mysql.connection.commit()
+            cursor.close()
+            message = "Sub Category updated successfullly"
+            alert_class = "success"
+            return redirect(
+                    url_for(
+                        ".admin_sub_categories",
+                        message=message,
+                        alert_class=alert_class,
+                        sub_category_id=sub_category_id,
+                    )
+                )
+
+    return render_template(
+        "edit_sub_category.html", sub_category_id=sub_category_id, current_page=current_page,sub_category=sub_category,admin=admin
+    )
+    
+    
+@admin_blueprint.route("/admin/delete_sub_category/<int:sub_category_id>", methods=["POST"])
+def admin_delete_sub_category(sub_category_id):
+    current_page = "Sub Categories"
+    if request.method=='POST':
+        if (
+            "logged_in" not in session
+            or not session["logged_in"]
+            or "usertype" not in session
+            or session["usertype"] != "admin_user"
+        ):
+            return redirect(url_for(".admin_login"))
+        else:
+            
+            message = request.args.get("message", "")
+            alert_class = request.args.get("alert_class")
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(
+                    f"DELETE FROM sub_category WHERE sub_category_id={sub_category_id}",
+                )
+            mysql.connection.commit()
+            cursor.close()
+            message = "Sub Category Deleted Successfullly"
+            alert_class = "success"
+            return redirect(
+                    url_for(
+                        ".admin_sub_categories",
+                        message=message,
+                        alert_class=alert_class,
+                        sub_category_id=sub_category_id,
+                    )
+                )
+    return render_template(
+            "admin_sub_categories.html",
+            message=message,
+            alert_class=alert_class,
+            current_page=current_page,
+        )
