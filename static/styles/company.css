@@ -60,6 +60,9 @@ table.table th i {
 table.table td:last-child {
     width: 130px;
 }
+.container-xl {
+    max-width: 15000px;
+  }
 table.table td a {
     color: #a0a5b1;
     display: inline-block;

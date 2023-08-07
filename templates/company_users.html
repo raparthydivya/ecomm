@@ -1,10 +1,11 @@
-{% include 'admin_sidebar.html' %}
+{% include 'sidebar.html' %}
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>admin/users</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/admin.css') }}" >
+<title>company/users</title>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/company.css') }}" >
 
 
 <script>
@@ -21,11 +22,6 @@ $(document).ready(function(){
         } );
     </script>
     <div class="alert alert-{{alert_class}}" role="alert"> {{message}}</div>
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active"><a href='/admin/users'>Users</a></li>
-        </ol>
-      </nav>
     <div class="container-xl">
         <div class="table-responsive">
             <div class="table-wrapper">
@@ -45,12 +41,12 @@ $(document).ready(function(){
                 <table id="myTable" class="table table-striped table-primary table-hover table-bordered">
                     <thead>
                         <tr><center>
-                            <th>User Id</th>
+                    
                         <th>User Name </th>
                         <th>Mobile</th>    
                         <th>Created Date</th>
                         <th>Updated Date</th>
-                         <th> Action </th>
+                 
                          
                         </center>
                         </tr>
@@ -58,15 +54,12 @@ $(document).ready(function(){
                     <tbody>
                     {% for user in users %}
                     <tr>
-                        <td>{{user.user_id}}</td>
+                      
                         <td>{{user.username}}
                         <td>{{user.mobile}}</td>
                      
                         <td>{{user.created_date}}</td>
                         <td>{{user.updated_date}}</td>
-                        <td><center>
-                            <a href="{{url_for('.admin_view_address',user_id=user.user_id)}}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                            </center></td>
                         
                     </tr>
                     {% endfor %}

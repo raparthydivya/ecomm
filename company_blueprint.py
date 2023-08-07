@@ -447,15 +447,16 @@ def company_add_product():
     if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
             return redirect(url_for(".company_login"))
     else:
+        company_id = session["company_id"]
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM company WHERE company_id={company_id}")
+        company=cursor.fetchone()
+        cursor.close()
         if request.method == "POST":
         
             data = request.form
             company_user_id = session["company_user_id"]
-            company_id = session["company_id"]
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(f"SELECT * FROM company WHERE company_id={company_id}")
-            company=cursor.fetchone()
-            cursor.close()
+            
             name = data["name"]
             product_code = data["product_code"]
             description = data["description"]
@@ -507,7 +508,7 @@ def company_add_product():
                     url_for(
                         ".company_view_product",
                         message=message,
-                        alert_class=alert_class
+                        alert_class=alert_class,company=company
                     )
                 )
 
@@ -580,7 +581,7 @@ def company_update_order_status():
             company=cursor.fetchone()
             cursor.close()
             order_id = request.form.get("order_id")
-            print(order_id)
+            # print(order_id)
             status = request.form.get("status")
             # print(update_status)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -591,6 +592,101 @@ def company_update_order_status():
             return redirect(url_for(".company_view_orders", order_id=order_id))
 
         return redirect(url_for("company_home"), current_page=current_page,company=company)
+
+@company_blueprint.route("/company/users", methods=["GET", "POST"])
+def company_users():
+    current_page = "users"
+    # validate_login()
+    if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+        return redirect(url_for(".company_login"))
+    else:
+        message = request.args.get("message", "")
+        alert_class = request.args.get("alert_class")
+        
+        company_user_id = session["company_user_id"]
+        company_id = session["company_id"]
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT * FROM company WHERE company_id={company_id}")
+        company=cursor.fetchone()
+        cursor.close()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(f"SELECT DISTINCT u.* FROM user u WHERE u.user_id IN( SELECT DISTINCT o.user_id FROM orders AS o JOIN product AS p ON o.product_id=p.product_id JOIN company as c ON c.company_id=p.company_id JOIN user as u ON u.user_id=o.user_id WHERE c.company_id={company_id})")
+        users=cursor.fetchall()
+        # print(users)
+    return render_template('company_users.html',users=users,company=company,current_page=current_page)
+
+
+
+
+
+@company_blueprint.route("/company/delete_product/<int:product_id>", methods=["POST"])
+def company_delete_product(product_id):
+    current_page = "products"
+    if request.method=='POST':
+        if "logged_in" not in session or not session["logged_in"] or "usertype" not in session or session['usertype']!='company_user':
+           return redirect(url_for(".company_login"))
+        else:
+            message = request.args.get("message", "")
+            alert_class = request.args.get("alert_class")
+            
+            company_user_id = session["company_user_id"]
+            company_id = session["company_id"]
+            
+            message = request.args.get("message", "")
+            alert_class = request.args.get("alert_class")
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(
+                    f"DELETE FROM product WHERE product_id={product_id}",
+                )
+            mysql.connection.commit()
+            cursor.close()
+            message = "Product Deleted Successfullly"
+            alert_class = "success"
+            return redirect(
+                    url_for(
+                        ".company_products",
+                        message=message,
+                        alert_class=alert_class,
+                        product_id=product_id,
+                    )
+                )
+    return render_template(
+            "products.html",
+            message=message,
+            alert_class=alert_class,
+            current_page=current_page,
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #     if request.method == 'POST':
